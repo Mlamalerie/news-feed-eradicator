@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-- No unreleased changes
+- YouTube: Hide Shorts shelves and thumbnails on home, subscriptions and search
 
 ## [3.0.5] - 2026-07-16
 

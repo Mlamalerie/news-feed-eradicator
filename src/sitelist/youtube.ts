@@ -25,6 +25,33 @@ export const site: Site = {
 					selectors: ['ytd-guide-entry-renderer:has(a[title="Shorts"])', 'ytd-mini-guide-entry-renderer:has(a[title="Shorts"])'],
 				},
 				{
+					id: regionId('shorts-content'),
+					title: 'Shorts videos and shelves',
+					type: 'remove',
+					paths: '*',
+					// NOTE: selectors are scoped by an ancestor rather than by `paths` because
+					// YouTube is a SPA - ancestor guards update instantly, path matching lags
+					// behind the 15ms pathname poll in the content script.
+					selectors: [
+						// Shorts shelf on the home and subscriptions feeds
+						'[page-subtype="home"] ytd-rich-section-renderer:has(ytd-rich-shelf-renderer[is-shorts])',
+						'[page-subtype="home"] ytd-rich-section-renderer:has(.shortsLockupViewModelHost)',
+						'[page-subtype="subscriptions"] ytd-rich-section-renderer:has(ytd-rich-shelf-renderer[is-shorts])',
+						'[page-subtype="subscriptions"] ytd-rich-section-renderer:has(.shortsLockupViewModelHost)',
+						// Individual Shorts that appear inline in the home grid
+						'ytd-rich-item-renderer:has(.shortsLockupViewModelHost)',
+						// Search results: horizontal shelf, new-style grid, standalone thumbnails
+						'ytd-search ytd-reel-shelf-renderer',
+						'ytd-search grid-shelf-view-model:has(.shortsLockupViewModelHost)',
+						// aria-label is localised, so the href variant below is what actually
+						// carries non-English UIs - keep both.
+						'ytd-search ytd-video-renderer:has(badge-shape[aria-label="Shorts"])',
+						'ytd-search ytd-video-renderer:has(a[href^="/shorts/"])',
+						// Watch page sidebar
+						'#secondary ytd-compact-video-renderer:has(a[href^="/shorts/"])',
+					],
+				},
+				{
 					id: regionId('explore-nav'),
 					title: 'Explore navigation menu',
 					type: 'remove',
@@ -75,7 +102,7 @@ export const site: Site = {
 					type: 'remove',
 					paths: '*',
 					selectors: [
-						'ytd-guide-section-renderer:nth-child(2)', 
+						'ytd-guide-section-renderer:nth-child(2)',
 						'ytd-mini-guide-renderer:nth-child(2)'
 					],
 					default: false,
