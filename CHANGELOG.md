@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - YouTube: Hide Shorts shelves and thumbnails on home, subscriptions and search
+- YouTube: Optionally hide videos from official artist channels (off by default)
 
 ## [3.0.5] - 2026-07-16
 

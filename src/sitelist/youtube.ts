@@ -107,6 +107,38 @@ export const site: Site = {
 					],
 					default: false,
 				},
+				{
+					id: regionId('artist-channels'),
+					title: 'Music (official artist channels)',
+					type: 'remove',
+					paths: '*',
+					default: false,
+					// Hides any thumbnail whose channel carries the Official Artist Channel
+					// badge, which is distinct from the plain verified tick.
+					//
+					// In the current view-model DOM the badge is NOT a `badge-shape` element:
+					// it is a 14x14 icon inlined into the channel name's attributed string,
+					// wrapped in `.ytAttributedStringImageElement`. That wrapper is shared
+					// with the ordinary verified tick, so the only discriminator is the SVG
+					// path data - the OAC badge draws a scalloped rosette starting
+					// "M9.03 2.242", the verified tick draws a circle starting "M12 1C5.925".
+					// Verified against a live home feed: the rosette matched only music
+					// channels, the circle only non-music ones.
+					//
+					// Never put a comma inside :has() - sanitizeSelector() in the service
+					// worker strips commas per-selector, silently turning :has(a, b) into
+					// the descendant combinator :has(a b). Use separate entries for "or".
+					selectors: [
+						'ytd-rich-item-renderer:has(.ytAttributedStringImageElement path[d^="M9.03 2.242"])',
+						'yt-lockup-view-model:has(.ytAttributedStringImageElement path[d^="M9.03 2.242"])',
+						'ytd-video-renderer:has(.ytAttributedStringImageElement path[d^="M9.03 2.242"])',
+						'ytd-compact-video-renderer:has(.ytAttributedStringImageElement path[d^="M9.03 2.242"])',
+						// Legacy Polymer DOM, still served on some surfaces. No-op otherwise.
+						'ytd-rich-item-renderer:has(.badge-style-type-verified-artist)',
+						'ytd-video-renderer:has(.badge-style-type-verified-artist)',
+						'ytd-compact-video-renderer:has(.badge-style-type-verified-artist)',
+					],
+				},
 			],
 		}
 
