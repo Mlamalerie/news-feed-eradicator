@@ -66,6 +66,8 @@ Basé sur le projet open source News Feed Eradicator de Jordan West. Code source
 - Store icon 128×128: `icon-128.png`
 - Screenshots 1280×800: `1-blocked.png`, `2-blocks.png`, `3-youtube-music.png`, `4-statistics.png`
 - Small promo tile 440×280: `promo-tile-440x280.png`
+- Marquee promo tile 1400×560: `marquee-1400x560.png`
+- All images are 24-bit PNG without alpha, as the store requires
 
 **Homepage URL**: https://github.com/Mlamalerie/news-feed-eradicator
 **Support URL**: https://github.com/Mlamalerie/news-feed-eradicator/issues
