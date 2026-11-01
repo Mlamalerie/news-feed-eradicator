@@ -8,7 +8,7 @@ export const AboutTabContent = () => {
 	return (
 		<div class="p-8 space-y-4">
 				<div class="prose">
-					<p>Scroll Less hides music, Shorts and other feed distractions so you can use YouTube on purpose instead of by reflex. Everything runs locally in your browser: the extension does not collect or send any data.</p>
+					<p>Stop Scrolling, Start Winning hides music, Shorts and other feed distractions so you can use YouTube on purpose instead of by reflex. Everything runs locally in your browser: the extension does not collect or send any data.</p>
 				</div>
 
 				<div class="prose">
@@ -17,7 +17,7 @@ export const AboutTabContent = () => {
 				</div>
 
 				<div class="prose">
-					<p>Scroll Less is made by Mlamali Said Salimo (<a href="https://github.com/Mlamalerie">Mlamali The Engineer</a>). Site logos come from <a href="https://simpleicons.org/">Simple Icons</a> and belong to their respective owners; see <a href={`${REPO}/blob/main/NOTICE.md`}>NOTICE.md</a> for all credits.</p>
+					<p>Stop Scrolling, Start Winning is made by Mlamali Said Salimo (<a href="https://github.com/Mlamalerie">Mlamali The Engineer</a>). Site logos come from <a href="https://simpleicons.org/">Simple Icons</a> and belong to their respective owners; see <a href={`${REPO}/blob/main/NOTICE.md`}>NOTICE.md</a> for all credits.</p>
 				</div>
 
 				<div class="prose">

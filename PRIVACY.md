@@ -1,8 +1,8 @@
-# Privacy policy — Scroll Less
+# Privacy policy — Stop Scrolling, Start Winning
 
 *Last updated: 1 November 2026*
 
-Scroll Less is a browser extension made by Mlamali Said Salimo ("Mlamali The Engineer"). It does not collect, sell or share any personal data.
+Stop Scrolling, Start Winning is a browser extension made by Mlamali Said Salimo ("Mlamali The Engineer"). It does not collect, sell or share any personal data.
 
 ## What the extension stores
 

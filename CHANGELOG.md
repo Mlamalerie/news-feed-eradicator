@@ -4,7 +4,7 @@
 
 ## [0.1.0] - 2026-11-01
 
-First release of this fork, renamed Scroll Less (working name "Silent Feed" was already taken on the Chrome Web Store). Based on News Feed Eradicator 3.0.5.
+First release of this fork, renamed Stop Scrolling, Start Winning (the names "Silent Feed" and "Stop Scrolling, Start Winning" were set aside: already taken or too close to existing extensions). Based on News Feed Eradicator 3.0.5.
 
 - YouTube: Hide Shorts shelves and thumbnails on home, subscriptions and search
 - YouTube: Music filter (on by default): official artist channels, "- Topic" channels, Mixes and album playlists, music video titles, music shelves and the YouTube Music link

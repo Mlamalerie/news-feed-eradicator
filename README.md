@@ -1,4 +1,4 @@
-# Scroll Less
+# Stop Scrolling, Start Winning
 
 A browser extension that hides music, Shorts and other feed distractions on YouTube (and replaces feeds on a few other sites with a quote).
 

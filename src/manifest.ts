@@ -42,7 +42,7 @@ export default {
 	],
 	"browser_specific_settings": {
 		"gecko": {
-			"id": "@scroll-less"
+			"id": "@stop-scrolling-start-winning"
 		},
 		"gecko_android": {
 			"strict_min_version": "113.0"

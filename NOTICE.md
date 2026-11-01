@@ -2,7 +2,7 @@
 
 ## Original project
 
-Scroll Less is a fork of **[News Feed Eradicator](https://github.com/jordwest/news-feed-eradicator)**, created by **[Jordan West](https://west.io/)** in 2012 and developed since with many contributors ([list of contributors](https://github.com/jordwest/news-feed-eradicator/graphs/contributors)). The site-blocking engine, the options page, the quote widget, the snooze feature and most of the supported sites come from that project. Thank you to Jordan West and to everyone who contributed.
+Stop Scrolling, Start Winning is a fork of **[News Feed Eradicator](https://github.com/jordwest/news-feed-eradicator)**, created by **[Jordan West](https://west.io/)** in 2012 and developed since with many contributors ([list of contributors](https://github.com/jordwest/news-feed-eradicator/graphs/contributors)). The site-blocking engine, the options page, the quote widget, the snooze feature and most of the supported sites come from that project. Thank you to Jordan West and to everyone who contributed.
 
 The original project and this fork are released under the **GNU Affero General Public License v3.0** (see `LICENSE`). If you distribute or run a modified version as a service, the AGPL requires that you make your corresponding source code available under the same licence.
 

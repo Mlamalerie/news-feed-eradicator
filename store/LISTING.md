@@ -1,11 +1,11 @@
-# Chrome Web Store submission — Scroll Less
+# Chrome Web Store submission — Stop Scrolling, Start Winning
 
 Everything to paste into the developer dashboard (https://chrome.google.com/webstore/devconsole).
-Upload: `dist/ScrollLess_<version>.zip` (built with `make`).
+Upload: `dist/StopScrollingStartWinning_<version>.zip` (built with `make`).
 
 ## Store listing tab
 
-**Name** (from the manifest): Scroll Less
+**Name** (from the manifest): Stop Scrolling, Start Winning
 
 **Summary** (from the manifest, 132 chars max):
 Hide feeds, Shorts and music, and set schedules and time limits for distracting sites. Choose what you watch.
@@ -16,7 +16,7 @@ Hide feeds, Shorts and music, and set schedules and time limits for distracting 
 
 **Description (English)**:
 
-Scroll Less helps you use the web on purpose instead of by reflex.
+Stop Scrolling, Start Winning helps you use the web on purpose instead of by reflex.
 
 Replace endless feeds with a quote, so you open a site, do what you came for, and leave.
 
@@ -40,7 +40,7 @@ Based on the open-source News Feed Eradicator by Jordan West. Source code: https
 
 **Description (Français)**:
 
-Scroll Less vous aide à utiliser le web volontairement, pas par réflexe.
+Stop Scrolling, Start Winning vous aide à utiliser le web volontairement, pas par réflexe.
 
 Les fils infinis sont remplacés par une citation : vous ouvrez un site, faites ce pour quoi vous êtes venu, et repartez.
 
