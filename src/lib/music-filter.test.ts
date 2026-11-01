@@ -121,3 +121,10 @@ describe('cardKey', () => {
 		expect(cardKey({ ...base, hrefs: ['/@chan'], title: 'Été', channel: 'Chan' })).toBe('ete|chan');
 	});
 });
+
+test('hide mode defaults to hide and only accepts hide or blur', () => {
+	const d = sanitizeMusicFilter(undefined);
+	expect([d.musicMode, d.durationMode]).toEqual(['hide', 'hide']);
+	const b = sanitizeMusicFilter({ musicMode: 'blur', durationMode: 'invisible' });
+	expect([b.musicMode, b.durationMode]).toEqual(['blur', 'hide']);
+});

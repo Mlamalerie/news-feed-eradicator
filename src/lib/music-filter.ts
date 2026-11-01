@@ -3,6 +3,8 @@
  * The DOM side lives in entrypoints/intercept/music-scanner.ts.
  */
 
+export type HideMode = 'hide' | 'blur';
+
 export type MusicSurface = 'home' | 'search' | 'watch' | 'other';
 
 export type MusicFilterSettings = {
@@ -24,6 +26,10 @@ export type MusicFilterSettings = {
 	allowChannels: string[];
 	/** Hide videos shorter than this many minutes (0 = off) */
 	minDurationMin: number;
+	/** What happens to music: removed from the page, or left visible but blurred and unclickable */
+	musicMode: HideMode;
+	/** Same, for videos shorter than minDurationMin */
+	durationMode: HideMode;
 	/** Extra words/phrases that hide a video when found in its title (case and accent insensitive) */
 	blockKeywords: string[];
 };
@@ -47,6 +53,8 @@ export const defaultMusicFilterSettings = (): MusicFilterSettings => ({
 	allowChannels: [],
 	blockKeywords: [],
 	minDurationMin: 0,
+	musicMode: 'hide',
+	durationMode: 'hide',
 });
 
 export type CardInfo = {
@@ -166,6 +174,8 @@ export const parseList = (text: string): string[] => {
 const asBool = (v: unknown, fallback: boolean): boolean => (typeof v === 'boolean' ? v : fallback);
 const asList = (v: unknown): string[] => (Array.isArray(v) ? parseList(v.filter(x => typeof x === 'string').join('\n')) : []);
 
+const asMode = (v: unknown): HideMode => (v === 'blur' ? 'blur' : 'hide');
+
 const asMinutes = (v: unknown): number => {
 	const n = Math.floor(Number(v));
 	return Number.isFinite(n) && n >= 0 && n <= 240 ? n : 0;
@@ -193,6 +203,8 @@ export const sanitizeMusicFilter = (raw: unknown): MusicFilterSettings => {
 		},
 		allowChannels: asList(r.allowChannels),
 		minDurationMin: asMinutes(r.minDurationMin),
+		musicMode: asMode(r.musicMode),
+		durationMode: asMode(r.durationMode),
 		blockKeywords: asList(r.blockKeywords),
 	};
 };

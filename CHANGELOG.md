@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- YouTube: choose to hide music, and videos shorter than your minimum, completely or to keep them visible but blurred
 - YouTube: hide videos shorter than 15, 30, 45 minutes or 1 hour (setting in Sites > YouTube)
 
 ## [0.1.0] - 2026-11-01

@@ -1,7 +1,7 @@
 import { createResource, Show } from "solid-js";
 import { loadMusicFilter, saveMusicFilter } from "/storage/storage";
 import { sendToServiceWorker } from "/messaging/messages";
-import { parseList, type MusicFilterSettings, type MusicSurface } from "/lib/music-filter";
+import { parseList, type HideMode, type MusicFilterSettings, type MusicSurface } from "/lib/music-filter";
 import { useOptionsPageState } from "../../state";
 
 type DetectKey = keyof MusicFilterSettings['detect'];
@@ -41,6 +41,16 @@ export const YoutubeMusicSettings = () => {
 		</div>
 
 		<div class="px-4 pt-2 space-y-1">
+			<label class="block font-xs text-secondary font-bold" for="music-mode">What to do with music</label>
+			<select id="music-mode" disabled={state.settingsLockedDown()} value={s().musicMode}
+				onChange={e => update(v => { v.musicMode = e.currentTarget.value as HideMode; return v; })}>
+				<option value="hide">Hide it completely</option>
+				<option value="blur">Keep it visible but blurred</option>
+			</select>
+			<p class="font-xs text-secondary">Blurred items stay on the page but can't be clicked.</p>
+		</div>
+
+		<div class="px-4 pt-2 space-y-1">
 			<label class="block font-xs text-secondary font-bold" for="music-duration">Hide videos shorter than</label>
 			<select id="music-duration" disabled={state.settingsLockedDown()} value={String(s().minDurationMin)}
 				onChange={e => update(v => { v.minDurationMin = Number(e.currentTarget.value); return v; })}>
@@ -50,6 +60,14 @@ export const YoutubeMusicSettings = () => {
 				<option value="45">45 minutes</option>
 				<option value="60">1 hour</option>
 			</select>
+			<Show when={s().minDurationMin > 0}>
+				<label class="block font-xs text-secondary font-bold pt-2" for="duration-mode">What to do with them</label>
+				<select id="duration-mode" disabled={state.settingsLockedDown()} value={s().durationMode}
+					onChange={e => update(v => { v.durationMode = e.currentTarget.value as HideMode; return v; })}>
+					<option value="hide">Hide them completely</option>
+					<option value="blur">Keep them visible but blurred</option>
+				</select>
+			</Show>
 			<p class="font-xs text-secondary">Applies to the pages chosen under Advanced. Live streams and Shorts are not affected.</p>
 		</div>
 

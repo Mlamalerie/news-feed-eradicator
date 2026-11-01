@@ -43,6 +43,8 @@ Quotes: the widget shows a quote in place of the feed. English quotes come from 
 
 Statistics: the toolbar icon shows how much was hidden today, and the Statistics tab shows the last 7 days and 30-day totals. Everything stays on your device.
 
+Hide or blur: for music and for short videos you can choose between hiding them completely or keeping them visible but blurred and not clickable.
+
 Length: hide videos shorter than 15, 30, 45 minutes or 1 hour, to skip clips and keep the longer content you chose. Set it under Sites > YouTube.
 
 Also available on YouTube: hide the main feed, suggested videos, comments, live chat, notifications and subscriptions.

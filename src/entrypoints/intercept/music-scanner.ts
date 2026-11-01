@@ -3,6 +3,7 @@ import {
 	classifyCard,
 	defaultMusicFilterSettings,
 	shouldHideShelf,
+	type HideMode,
 	surfaceForPath,
 	type CardInfo,
 	type MusicFilterSettings,
@@ -135,7 +136,9 @@ export class MusicScanner {
 		if (this.styleEl?.isConnected) return;
 		this.styleEl = document.createElement('style');
 		this.styleEl.id = STYLE_ID;
-		this.styleEl.textContent = `[${HIDDEN_ATTR}] { display: none !important; }`;
+		// "hide" removes the element; "blur" keeps it visible but blurred, dimmed and not clickable
+		this.styleEl.textContent = `[${HIDDEN_ATTR}="hide"] { display: none !important; }
+[${HIDDEN_ATTR}="blur"] { filter: blur(14px) !important; opacity: 0.45 !important; pointer-events: none !important; user-select: none !important; }`;
 		(document.head ?? document.documentElement).appendChild(this.styleEl);
 	}
 
@@ -189,11 +192,13 @@ export class MusicScanner {
 
 		const surface = surfaceForPath(window.location.pathname);
 		let hide = false;
+		let mode: HideMode = 'hide';
 		let kind: 'music' | 'short' = 'music';
 		let key = '';
 		if (el.matches(SHELF_SELECTOR)) {
 			const title = firstText(el, SHELF_TITLE_SELECTORS);
 			hide = this.musicEnabled && shouldHideShelf(title, this.settings, surface);
+			mode = this.settings.musicMode;
 			key = `shelf:${title}`;
 		} else {
 			const info = extractCardInfo(el);
@@ -201,19 +206,23 @@ export class MusicScanner {
 			if (this.musicEnabled && classifyCard(info, this.settings, surface).hide) {
 				hide = true;
 				kind = 'music';
+				mode = this.settings.musicMode;
 			} else if (this.settings.surfaces[surface] && isTooShort(parseDurationSeconds(info.durationText ?? ''), this.settings.minDurationMin)) {
 				hide = true;
 				kind = 'short';
+				mode = this.settings.durationMode;
 			}
 		}
 
-		if (hide !== el.hasAttribute(HIDDEN_ATTR)) {
-			if (hide) {
-				el.setAttribute(HIDDEN_ATTR, '');
-				this.countNew(key, kind);
-			} else {
-				el.removeAttribute(HIDDEN_ATTR);
-			}
+		const current = el.getAttribute(HIDDEN_ATTR);
+		const wanted = hide ? mode : null;
+		if (current === wanted) return;
+		if (wanted == null) {
+			el.removeAttribute(HIDDEN_ATTR);
+		} else {
+			el.setAttribute(HIDDEN_ATTR, wanted);
+			// Switching between hide and blur is not a new item, so only count first-time hiding
+			this.countNew(key, kind);
 		}
 	}
 }
