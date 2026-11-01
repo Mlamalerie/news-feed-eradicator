@@ -2,6 +2,7 @@ import type { RegionId, SiteId } from "../types/sitelist";
 import type { Quote, QuoteV1 } from "../quote";
 import type { MusicFilterSettings } from "../lib/music-filter";
 import type { Stats } from "../lib/stats";
+import type { Block, Usage } from "../lib/blocks";
 
 export const CURRENT_STORAGE_SCHEMA_VERSION = 2;
 
@@ -24,6 +25,8 @@ export type StorageLocalV2 = {
 	musicFilter?: MusicFilterSettings;
 	/** Which builtin quotes to show. Defaults to all. */
 	stats?: Stats;
+	blocks?: Block[];
+	usage?: Usage;
 	quoteLanguage?: 'all' | 'en' | 'fr';
 };
 

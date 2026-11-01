@@ -1,5 +1,7 @@
 import { createResource, createSignal, For, onCleanup, Show } from "solid-js";
-import { clearStats, loadStats } from "/storage/storage";
+import { clearStats, loadStats, loadUsage } from "/storage/storage";
+import { dateKey } from "/lib/blocks";
+import { SiteLogo } from "/shared/components/site-logo";
 import { daysAgo, dayTotal, type Stats } from "/lib/stats";
 import { useOptionsPageState } from "../../state";
 
@@ -13,10 +15,11 @@ const shortDay = (iso: string) => new Date(`${iso}T12:00:00`).toLocaleDateString
 export const StatsTabContent = () => {
 	const state = useOptionsPageState();
 	const [stats, { refetch }] = createResource<Stats>(loadStats);
+	const [usage, { refetch: refetchUsage }] = createResource(loadUsage);
 	const [confirmReset, setConfirmReset] = createSignal(false);
 
 	// Counts arrive while this page is open (from other tabs), so keep it fresh
-	const timer = setInterval(refetch, 3000);
+	const timer = setInterval(() => { refetch(); refetchUsage(); }, 3000);
 	onCleanup(() => clearInterval(timer));
 
 	const siteTitle = (id: string) => state.siteList.get()?.sites.find(s => s.id === id)?.title ?? id;
@@ -49,6 +52,22 @@ export const StatsTabContent = () => {
 			</div>
 
 			<div>
+				<h4 class="font-bold">Time on sites today</h4>
+				{(() => {
+					const rows = () => Object.entries(usage()?.[dateKey(new Date())] ?? {})
+						.map(([site, hours]) => [site, Math.round(hours.reduce((a, b) => a + (b ?? 0), 0) / 60)] as const)
+						.filter(([, min]) => min > 0)
+						.sort((a, b) => b[1] - a[1]);
+					const fmt = (min: number) => min >= 60 ? `${Math.floor(min / 60)} h ${min % 60} min` : `${min} min`;
+					return <Show when={rows().length > 0} fallback={<p class="text-secondary font-xs">No time recorded yet today.</p>}>
+						<ul class="space-y-1 py-2">
+							<For each={rows()}>{([site, min]) => <li class="flex cross-center gap-2"><SiteLogo siteId={site} size={18} /><span class="flex-1">{siteTitle(site)}</span><span class="font-bold">{fmt(min)}</span></li>}</For>
+						</ul>
+					</Show>;
+				})()}
+			</div>
+
+			<div>
 				<h4 class="font-bold">Last 30 days: {total30()}</h4>
 				<Show when={last30().length > 0} fallback={<p class="text-secondary font-xs">Nothing yet. Counts appear as you browse sites that are switched on.</p>}>
 					<ul class="space-y-1 py-2">
@@ -60,7 +79,7 @@ export const StatsTabContent = () => {
 				</Show>
 			</div>
 
-			<p class="text-secondary font-xs">Counts stay on this device. Music is counted once per distinct video or shelf per page load; a feed is counted once per page where it was replaced. The number on the toolbar icon is today's total.</p>
+			<p class="text-secondary font-xs">Counts stay on this device. Music is counted once per distinct video or shelf per page load; a feed is counted once per page where it was replaced. Time on sites counts only while the site is the visible, focused tab. The number on the toolbar icon is today's total of hidden items.</p>
 
 			<div class="text-center">
 				<button class="secondary" onClick={async () => {

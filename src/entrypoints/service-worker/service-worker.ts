@@ -1,9 +1,10 @@
 import { getBrowser, type MessageSender, type TabId } from '/lib/webextension';
 import type { Path, PathList, Region, Site, SiteId } from '/types/sitelist';
 import type { DesiredRegionState, RequestQuoteResponse, FromServiceWorkerMessage, ToServiceWorkerMessage } from '/messaging/messages';
-import { loadHideQuotes, addStat, loadStats, loadMusicFilter, loadQuoteLanguage, loadQuoteLists, loadRegionHideStyle, loadRegionsForSite, loadSitelist, loadSnoozeUntil, loadWidgetStyle, migrationPromise, saveQuoteEnabled, saveSiteEnabled, saveSnoozeUntil, saveThemeForSite } from '/storage/storage';
+import { loadHideQuotes, addStat, loadStats, loadBlocks, loadUsage, recordUsage, loadMusicFilter, loadQuoteLanguage, loadQuoteLists, loadRegionHideStyle, loadRegionsForSite, loadSitelist, loadSnoozeUntil, loadWidgetStyle, migrationPromise, saveQuoteEnabled, saveSiteEnabled, saveSnoozeUntil, saveThemeForSite } from '/storage/storage';
 import { originsForSite } from '/lib/util';
 import { badgeText, dayTotal, localDate, statKey } from '/lib/stats';
+import { isLocked, statusForSite, type BlockStatus } from '/lib/blocks';
 import { BuiltinQuotes, type Quote } from '/quote';
 import type { QuoteListId, StorageLocalV2, Theme } from '/storage/schema';
 import themeDark from '/themes/dark.css?raw';
@@ -13,6 +14,23 @@ const browser = getBrowser();
 browser.action.onClicked.addListener(() => {
 	browser.runtime.openOptionsPage();
 });
+
+// Usage writes are serialised so concurrent tabs can't overwrite each other's seconds.
+let usageQueue: Promise<unknown> = Promise.resolve();
+
+const blockStatusFor = async (siteId: SiteId): Promise<BlockStatus | null> => {
+	const [blocks, usage, snoozeUntil] = await Promise.all([loadBlocks(), loadUsage(), loadSnoozeUntil()]);
+	const snoozing = snoozeUntil != null && snoozeUntil > Date.now();
+	return statusForSite(blocks, siteId, usage, new Date(), snoozing);
+};
+
+const heartbeat = (siteId: SiteId, seconds: number): Promise<BlockStatus | null> => {
+	const s = Number.isFinite(seconds) ? Math.max(0, Math.min(Math.floor(seconds), 30)) : 0;
+	usageQueue = usageQueue
+		.then(() => (s > 0 ? recordUsage(siteId, s, new Date()) : undefined))
+		.catch(e => console.error('recordUsage failed', e));
+	return usageQueue.then(() => blockStatusFor(siteId));
+};
 
 // Toolbar badge: how much was hidden today. Updates are serialised so concurrent tabs can't lose counts.
 let statsQueue: Promise<unknown> = Promise.resolve();
@@ -167,6 +185,10 @@ const setSiteTheme = async (siteId: SiteId, theme: Theme | null) => {
 }
 
 const handleMessage = async (msg: ToServiceWorkerMessage, sender: MessageSender) => {
+	if (msg.type === 'heartbeat') {
+		return { block: await heartbeat(msg.siteId, msg.seconds) };
+	}
+
 	if (msg.type === 'recordStats') {
 		await recordStats(msg.siteId, msg.kind, msg.count);
 		return;
@@ -186,11 +208,12 @@ const handleMessage = async (msg: ToServiceWorkerMessage, sender: MessageSender)
 		const site = siteList.sites.find(site => site.hosts.includes(url.host));
 
 		if (site != null) {
-			const [siteOptions, regionHideStyle, widgetStyle, musicFilter] = await Promise.all([
+			const [siteOptions, regionHideStyle, widgetStyle, musicFilter, block] = await Promise.all([
 				loadRegionsForSite(site.id),
 				loadRegionHideStyle(),
 				loadWidgetStyle(),
 				site.id === 'youtube' ? loadMusicFilter() : null,
+				blockStatusFor(site.id),
 			]);
 
 			let regions = site.regions
@@ -216,6 +239,7 @@ const handleMessage = async (msg: ToServiceWorkerMessage, sender: MessageSender)
 				widgetStyle,
 				hideQuotes,
 				musicFilter,
+				block,
 				theme: {
 					css: theme === 'light' ? themeLight : themeDark,
 					id: theme,
@@ -247,6 +271,10 @@ const handleMessage = async (msg: ToServiceWorkerMessage, sender: MessageSender)
 	}
 
 	if (msg.type === 'disableSite') {
+		const [blocks, usage] = await Promise.all([loadBlocks(), loadUsage()]);
+		if (blocks.some(b => b.siteIds.includes(msg.siteId) && isLocked(b, usage, new Date()))) {
+			return { refused: 'strict' };
+		}
 		await browser.scripting.unregisterContentScripts({ ids: [msg.siteId]});
 
 		const siteList = await loadSitelist();

@@ -31,6 +31,14 @@ I wanted to stop losing time on social media (X, Instagram and above all TikTok)
 
 TikTok (feeds), Instagram (feed, stories, suggestions, Explore, Reels), X (feed, "For you" posts, trends and news), plus the sites supported by the original project. Switch each site on in the options page; the browser asks for permission per site.
 
+Blocks (time limits): group sites into a block and choose when they are blocked, inspired by phone app blockers:
+- **Schedule**: days of the week and time ranges (overnight ranges work, e.g. 22:00 to 07:00).
+- **Daily limit**: minutes per day across the block's sites, then blocked until midnight.
+- **Hourly limit**: minutes per clock hour, then blocked until the next hour.
+- **Strict mode**: while active, the block can't be paused, edited or deleted, and its sites can't be switched off. A browser extension can't stop you from disabling it in `chrome://extensions`, so strict mode raises the effort rather than making it impossible.
+
+Time is counted only while one of the block's sites is the visible, focused tab, and only in this browser (not on your phone).
+
 Quotes: the widget shows a quote in place of the feed. English quotes come from the original project; 22 French quotes (Pascal, Montaigne, Saint-Exupéry, Sénèque, Simone Weil...) were added, and you can choose the language under Style.
 
 Statistics: the toolbar icon shows how much was hidden today, and the Statistics tab shows the last 7 days and 30-day totals. Everything stays on your device.

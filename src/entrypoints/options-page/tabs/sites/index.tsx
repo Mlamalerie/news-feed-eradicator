@@ -33,10 +33,14 @@ const Site = ({ site }: { site: Site }) => {
 	const disableSite = async (site: Site) => {
 		const origins = originsForSite(site);
 
-		await browser.runtime.sendMessage({
+		const result = await browser.runtime.sendMessage({
 			type: 'disableSite',
 			siteId: site.id
 		});
+		if (result?.refused === 'strict') {
+			alert(`${site.title} is part of a strict block that is active right now, so it can't be switched off until the block ends.`);
+			return;
+		}
 
 		await Promise.allSettled([
 			state.removePermissions({ origins, permissions: [] }),

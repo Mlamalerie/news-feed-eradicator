@@ -9,6 +9,9 @@ import sharedStyles from '../../shared/styles.css?raw';
 import type { Theme } from '../../storage/schema';
 import { signalObj, type SignalObj } from '/lib/solid-util';
 import { MusicScanner } from './music-scanner';
+import { BlockOverlay } from './block-overlay';
+import type { BlockStatus } from '/lib/blocks';
+import type { HeartbeatResponse } from '/messaging/messages';
 import { defaultMusicFilterSettings, type MusicFilterSettings } from '/lib/music-filter';
 
 const browser = getBrowser();
@@ -17,6 +20,36 @@ const recordStats = (kind: 'music' | 'feed', count: number) => {
 	if (state.siteId == null) return;
 	sendMessage({ type: 'recordStats', siteId: state.siteId, kind, count })?.catch?.(() => {});
 };
+
+const blockOverlay = new BlockOverlay();
+
+const applyBlock = (block: BlockStatus | null) => {
+	if (block != null && block.until > Date.now()) {
+		const show = () => blockOverlay.show(block);
+		document.documentElement != null ? show() : domReady.then(show);
+	} else {
+		blockOverlay.hide();
+	}
+};
+
+// Time tracking for usage limits: every few seconds, report how long the page was visible and
+// focused. The answer says whether a block now applies (a limit was just reached, a scheduled
+// block started or ended), so the page reacts within one interval.
+const HEARTBEAT_MS = 5000;
+let lastBeat = Date.now();
+setInterval(async () => {
+	const now = Date.now();
+	const elapsed = Math.round((now - lastBeat) / 1000);
+	lastBeat = now;
+	if (state.siteId == null) return;
+	const active = document.visibilityState === 'visible' && document.hasFocus() && !blockOverlay.visible;
+	try {
+		const res = await sendMessage({ type: 'heartbeat', siteId: state.siteId, seconds: active ? elapsed : 0 }) as HeartbeatResponse | undefined;
+		if (res != null) applyBlock(res.block);
+	} catch {
+		// Service worker restarting; the next beat will catch up
+	}
+}, HEARTBEAT_MS);
 
 const musicScanner = new MusicScanner(count => recordStats('music', count));
 
@@ -335,6 +368,7 @@ browser.runtime.onMessage.addListener(async (msg: FromServiceWorkerMessage) => {
 
 		state.ready = true;
 		state.siteId = msg.siteId;
+		applyBlock(msg.block);
 		state.theme.css = msg.theme.css;
 		state.hideQuotes = msg.hideQuotes;
 		state.widgetStyle.set(msg.widgetStyle);

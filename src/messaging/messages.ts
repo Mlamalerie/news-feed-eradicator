@@ -2,6 +2,7 @@ import { getBrowser } from "/lib/webextension";
 import type { QuoteListId, Theme } from "/storage/schema";
 import type { Region, SiteId } from "/types/sitelist";
 import type { MusicFilterSettings } from "/lib/music-filter";
+import type { BlockStatus } from "/lib/blocks";
 
 export const sendToServiceWorker = async <Response = any>(msg: ToServiceWorkerMessage): Promise<Response> => {
 	const browser = getBrowser();
@@ -27,6 +28,8 @@ type SiteDetails = {
 	hideQuotes: boolean,
 	/** Only sent for YouTube */
 	musicFilter: MusicFilterSettings | null,
+	/** Set when a block (schedule or usage limit) currently blocks the whole site */
+	block: BlockStatus | null,
 }
 
 export type DesiredRegionState = {
@@ -42,7 +45,17 @@ type OptionsUpdated = {
 	type: 'nfe#optionsUpdated',
 }
 
-export type ToServiceWorkerMessage = RecordStats | RequestSiteDetails | OpenOptionsPage | NotifyOptionsUpdated | SetSiteTheme | EnableSite | DisableSite | Snooze | RequestQuote | SetQuoteEnabled | ReadSnooze;
+export type ToServiceWorkerMessage = Heartbeat | RecordStats | RequestSiteDetails | OpenOptionsPage | NotifyOptionsUpdated | SetSiteTheme | EnableSite | DisableSite | Snooze | RequestQuote | SetQuoteEnabled | ReadSnooze;
+
+// Sent every few seconds by the content script. `seconds` is the time the page was visible and
+// focused since the last heartbeat (0 if not). Responds with HeartbeatResponse.
+type Heartbeat = {
+	type: 'heartbeat',
+	siteId: SiteId,
+	seconds: number,
+};
+
+export type HeartbeatResponse = { block: BlockStatus | null };
 
 // Report that the content script hid something, for the statistics page and the toolbar badge.
 type RecordStats = {

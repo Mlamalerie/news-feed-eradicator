@@ -12,6 +12,7 @@ import { SnoozeTabContent } from "./tabs/snooze";
 import { DebugTabContent } from "./tabs/debug";
 import { StyleTabContent } from "./tabs/style";
 import { StatsTabContent } from "./tabs/stats";
+import { BlocksTabContent } from "./tabs/blocks";
 import { appName, versionText } from "/lib/util";
 
 const PageTab: ParentComponent<{to: PageId}> = ({ to, children }) => {
@@ -31,6 +32,7 @@ const PageTabs = () => {
 
 	return <ul role="tablist" class="">
 		<PageTab to="sites">Sites</PageTab>
+		<PageTab to="blocks">Blocks</PageTab>
 		<PageTab to="stats">Statistics</PageTab>
 		<PageTab to="snooze">Snooze</PageTab>
 		<PageTab to="quotes">Quotes</PageTab>
@@ -67,6 +69,10 @@ const OptionsPage = () => {
 					<div role="tabpanel" class="shadow">
 						<Show when={state.page.get() === 'sites'}>
 							<SitesTabContent />
+						</Show>
+
+						<Show when={state.page.get() === 'blocks'}>
+							<BlocksTabContent />
 						</Show>
 
 						<Show when={state.page.get() === 'stats'}>

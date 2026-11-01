@@ -11,6 +11,9 @@ First release of this fork, renamed Silent Feed. Based on News Feed Eradicator 3
 - YouTube: Music filter settings: choose which detectors and pages apply, keep specific channels, add your own title keywords
 - TikTok: hide the For You / Following / Explore / Live feeds (new site, selectors unverified)
 - Instagram: hide the Reels page and the Reels button
+- Blocks: block groups of sites on a weekly schedule, after a daily or hourly usage limit, with an optional strict mode (no pausing, editing or switching the sites off while active)
+- Time on sites today in the Statistics tab
+- New target icon
 - Statistics: toolbar badge with today's total and a Statistics tab (last 7 days, 30-day totals)
 - 22 French quotes (verified against their sources) and a quote language setting
 - Music filter settings: detailed options moved into a collapsed Advanced section
