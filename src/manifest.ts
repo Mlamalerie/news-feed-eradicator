@@ -1,7 +1,7 @@
 import packageJson from '../package.json';
 
 export default {
-	"name": "News Feed Eradicator",
+	"name": packageJson.title,
 	"version": packageJson.version,
 	"description": packageJson.description,
 	"manifest_version": 3,
@@ -13,7 +13,7 @@ export default {
 			"32": "assets/icons/logo-contrast-32.png",
 			"64": "assets/icons/logo-contrast-64.png",
 		},
-		"default_title": "News Feed Eradicator"
+		"default_title": packageJson.title
 	},
 	"background": {
 		"service_worker": "entrypoints/service-worker/service-worker.js",
@@ -40,7 +40,7 @@ export default {
 	],
 	"browser_specific_settings": {
 		"gecko": {
-			"id": "@news-feed-eradicator"
+			"id": "@silent-feed"
 		},
 		"gecko_android": {
 			"strict_min_version": "113.0"

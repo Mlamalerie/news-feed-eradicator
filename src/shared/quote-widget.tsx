@@ -4,6 +4,7 @@ import type { Theme } from "../storage/schema";
 import type { SiteId } from "../types/sitelist";
 import { createSignal } from "solid-js";
 import { loadHideWidgetToolbar, saveHideWidgetToolbar } from "/storage/storage";
+import { appName } from "/lib/util";
 
 const [quote, { refetch: refetchQuote }] = createResource(async () => {
 	return sendToServiceWorker<RequestQuoteResponse>({
@@ -60,7 +61,7 @@ export const QuoteWidget = ({ siteId, theme, widgetStyle }: { siteId: SiteId | n
 				<div class="w-full position-relative">
 					<Show when={collapsed()}>
 						<div class="p-2 flex w-full axis-end position-absolute lr-0 pointer-events-none">
-							<button class="tertiary px-2 pointer-events-all" aria-label="Show News Feed Eradicator toolbar" onClick={() => setCollapsed(false)}>︙</button>
+							<button class="tertiary px-2 pointer-events-all" aria-label={`Show ${appName()} toolbar`} onClick={() => setCollapsed(false)}>︙</button>
 						</div>
 					</Show>
 					<Show when={!collapsed()}>
@@ -97,7 +98,7 @@ export const QuoteWidget = ({ siteId, theme, widgetStyle }: { siteId: SiteId | n
 		</div>
 		</Show>
 		<footer class="flex axis-center">
-				<button class="font-xs tertiary bg-transparent text-subtle text-shadow" onClick={openOptionsPage}>News Feed Eradicator</button>
+				<button class="font-xs tertiary bg-transparent text-subtle text-shadow" onClick={openOptionsPage}>{appName()}</button>
 		</footer>
 	</aside>
 }

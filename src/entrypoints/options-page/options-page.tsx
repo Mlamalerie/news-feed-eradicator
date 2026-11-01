@@ -11,7 +11,7 @@ import { AboutTabContent } from "./tabs/about";
 import { SnoozeTabContent } from "./tabs/snooze";
 import { DebugTabContent } from "./tabs/debug";
 import { StyleTabContent } from "./tabs/style";
-import { versionText } from "/lib/util";
+import { appName, versionText } from "/lib/util";
 
 const PageTab: ParentComponent<{to: PageId}> = ({ to, children }) => {
 	const state = useOptionsPageState();
@@ -45,7 +45,7 @@ const OptionsPage = () => {
 
 	return <div class="flex axis-center text-figure">
 		<div class="w-full mw-lg space-y-8 py-4">
-			<h1 class="text-center font-3xl text-secondary">News Feed Eradicator</h1>
+			<h1 class="text-center font-3xl text-secondary">{appName()}</h1>
 
 			<OptionsPageStateContext.Provider value={state}>
 				<Snooze />
@@ -91,7 +91,7 @@ const OptionsPage = () => {
 
 				<footer class="text-center space-y-4">
 					<div>
-						By <a href="https://west.io/">Jordan West</a> and <a href="https://github.com/jordwest/news-feed-eradicator/graphs/contributors">contributors</a>
+						Fork of <a href="https://github.com/jordwest/news-feed-eradicator">News Feed Eradicator</a> by <a href="https://west.io/">Jordan West</a> and <a href="https://github.com/jordwest/news-feed-eradicator/graphs/contributors">contributors</a>. Licensed under AGPL-3.0, <a href="https://github.com/Mlamalerie/news-feed-eradicator">source code</a>.
 					</div>
 					<div class="text-secondary font-xs">{versionText()}</div>
 				</footer>

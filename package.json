@@ -1,11 +1,10 @@
 {
-  "name": "news-feed-eradicator",
-  "title": "News Feed Eradicator",
-  "id": "jid1-oWTXWc3MRzRuiQ",
-  "description": "Eradicate distractions and take back control of your browsing",
-  "author": "Jordan West",
+  "name": "silent-feed",
+  "title": "Silent Feed",
+  "description": "Hide music, Shorts and other distractions on YouTube and your feeds",
+  "author": "Mlamali Said Salimo (fork of News Feed Eradicator by Jordan West)",
   "license": "AGPL-3.0-only",
-  "version": "3.0.5",
+  "version": "0.1.0",
   "type": "module",
   "module": "index.ts",
   "devDependencies": {

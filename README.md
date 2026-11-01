@@ -1,48 +1,60 @@
-# News Feed Eradicator
+# Silent Feed
 
-A browser extension that replaces your social media feeds with a quote.
+A browser extension that hides music, Shorts and other feed distractions on YouTube (and replaces feeds on a few other sites with a quote).
 
-[Install Chrome Extension](https://chrome.google.com/webstore/detail/news-feed-eradicator-for/fjcldmjmjhkklehbacihaiopjklihlgg?hl=en)
+> The working name "Silent Feed" is a placeholder: it is set in one place (`title` in `package.json`).
 
-[Install Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/news-feed-eradicator/)
+This is a fork of [News Feed Eradicator](https://github.com/jordwest/news-feed-eradicator) by Jordan West and contributors. It keeps the original AGPL-3.0 licence (see `LICENSE`); the engine and the other supported sites come from that project.
 
----------
+## What it does on YouTube
 
-## Contributing to News Feed Eradicator
+- Hides **Shorts** (shelves, thumbnails, the sidebar button).
+- Hides **music** when the "Music" region is switched on in the options page (off by default). What counts as music is configurable under **Sites > YouTube**:
+  - videos from **official artist channels** (the rosette badge),
+  - auto-generated **"Artist - Topic"** channels,
+  - **Mixes** and auto-generated album playlists,
+  - **titles** such as "Official Music Video", "Lyric Video", "(Audio)", "Clip officiel", "Full album",
+  - home-page **shelves** titled Music / Mix / Musique,
+  - the **YouTube Music** link in the sidebar.
+- Choose **where** it applies: home, search, suggestions next to a video, and "everywhere else" (subscriptions, channel pages, playlists, history; off by default).
+- **Never hide** a list of channels (one per line), and **also hide** titles containing your own words.
 
-### Reporting issues
+Also available on YouTube: hide the main feed, suggested videos, comments, live chat, notifications and subscriptions.
 
-For *bugs only*, please use the [issue tracker](https://github.com/jordwest/news-feed-eradicator/issues).
+## Known limitations
 
-### Feature requests, ideas, etc
+YouTube changes its page markup often. The music filter reads the page text and a few markup details (the artist badge, `list=RD` links), so a YouTube redesign can break a detector until it is updated. Title patterns are heuristics and can miss or over-match; use the allow list and your own keywords to tune them.
 
-For feature requests, ideas, and new site suggestions, please use the [Ideas discussion board](https://github.com/jordwest/news-feed-eradicator/discussions/categories/ideas). Check first if your idea already exists and give it an upvote if so.
-
-### Pull requests
-
-In general, pull requests are only accepted for bug fixes or documentation improvements. In terms of features I mostly consider the project "done" and would like to keep it minimal and simple to reduce the maintenance burden. If you have ideas, please post in the [Ideas discussion board](https://github.com/jordwest/news-feed-eradicator/discussions/categories/ideas). You are of course welcome to fork the project if you'd like to make a more complex version.
-
-----------
+---
 
 ## Development
 
-This plugin is built as a WebExtension - a standard for browser plugins currently supported in both Chrome and Firefox.
+This extension is built as a WebExtension (Manifest V3), supported by Chrome and Firefox.
 
 ### Dependencies
 
  - [bun](https://bun.com/)
  - make
 
-To build for either browser, clone the repository and then run:
+To build, clone the repository and run:
 
     make dev
 
-If everything is successful, check the `build` folder for the extension contents. You can load the `build` directory into either Chrome or Firefox as an _unpacked_ or _temporary_ extension. See the instructions for [Chrome](https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world#load-unpacked) or [Firefox](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Temporary_Installation_in_Firefox).
+Then load the `build` folder as an _unpacked_ (Chrome) or _temporary_ (Firefox) extension. `make dev` watches for changes and rebuilds; reload the extension in the browser after each rebuild.
 
-Running `make dev` will watch for changes and recompile, however each time you make changes you'll need to tell the browser to reload the temporary extension.
+Run the tests with:
 
-To build a distributable `.zip` for production, just run:
+    bun test
+
+To build a distributable `.zip` for production:
 
     make
 
-The extension package can be found in the `dist` folder.
+The package is written to `dist/`.
+
+### Where the music filter lives
+
+- `src/lib/music-filter.ts`: settings, defaults and the classification rules (no DOM, unit tested).
+- `src/entrypoints/intercept/music-scanner.ts`: scans YouTube cards and hides the ones classified as music.
+- `src/sitelist/youtube.ts`: the `artist-channels` region is the on/off switch.
+- `src/entrypoints/options-page/tabs/sites/youtube-music-settings.tsx`: the settings UI.

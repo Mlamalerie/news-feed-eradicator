@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-**Issues are for reporting bugs only. For feature requests, ideas, or new site suggestions please vote on or post in the ["Ideas" discussion board](https://github.com/jordwest/news-feed-eradicator/discussions/categories/ideas)**
+**Please include the page you were on (home, search, watch...) and, for YouTube music filtering, a title or channel name that was or was not hidden as expected.**
 
 #### Describe the bug, including how to reproduce
 

@@ -6,6 +6,8 @@ export function originsForSite(site: Site) {
 	return site.hosts.map(host => [`http://${host}/*`, `https://${host}/*`]).flat();
 }
 
+export const appName = () => packageJson.title;
+
 export const versionText = () => {
 	return `v${packageJson.version}`;
 }
