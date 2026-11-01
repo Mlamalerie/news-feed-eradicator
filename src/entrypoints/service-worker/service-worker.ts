@@ -41,7 +41,7 @@ const refreshBadge = async () => {
 	await browser.action.setBadgeText({ text: badgeText(dayTotal(stats[localDate()])) });
 };
 
-const recordStats = (siteId: SiteId, kind: 'music' | 'feed', count: number) => {
+const recordStats = (siteId: SiteId, kind: 'music' | 'short' | 'feed', count: number) => {
 	if (!Number.isFinite(count) || count <= 0) return statsQueue;
 	statsQueue = statsQueue
 		.then(() => addStat(localDate(), statKey(siteId, kind), Math.min(Math.floor(count), 1000)))

@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- YouTube: hide videos shorter than 15, 30, 45 minutes or 1 hour (setting in Sites > YouTube)
+
 ## [0.1.0] - 2026-11-01
 
 First release of this fork, renamed Stop Scrolling, Start Winning (the names "Silent Feed" and "Stop Scrolling, Start Winning" were set aside: already taken or too close to existing extensions). Based on News Feed Eradicator 3.0.5.

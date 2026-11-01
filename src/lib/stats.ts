@@ -1,5 +1,5 @@
 /** Daily counters of what the extension hid. Keys look like "youtube:music" or "tiktok:feed". */
-export type StatsKind = 'music' | 'feed';
+export type StatsKind = 'music' | 'short' | 'feed';
 export type DayStats = Record<string, number>;
 export type Stats = Record<string, DayStats>; // key: local date YYYY-MM-DD
 

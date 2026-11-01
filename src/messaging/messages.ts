@@ -61,7 +61,7 @@ export type HeartbeatResponse = { block: BlockStatus | null };
 type RecordStats = {
 	type: 'recordStats',
 	siteId: SiteId,
-	kind: 'music' | 'feed',
+	kind: 'music' | 'short' | 'feed',
 	count: number,
 };
 

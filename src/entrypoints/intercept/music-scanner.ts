@@ -7,6 +7,7 @@ import {
 	type CardInfo,
 	type MusicFilterSettings,
 } from '../../lib/music-filter';
+import { isTooShort, parseDurationSeconds } from '../../lib/duration';
 
 /**
  * Hides music on YouTube by scanning video cards and tagging the ones classified as music with
@@ -32,6 +33,7 @@ const ARTIST_BADGE_SELECTOR = '.ytAttributedStringImageElement path[d^="M9.03 2.
 const TITLE_SELECTORS = ['#video-title', '.yt-lockup-metadata-view-model__title', 'h3'];
 const CHANNEL_SELECTORS = ['ytd-channel-name', '#channel-name', '.yt-content-metadata-view-model__metadata-text'];
 const SHELF_TITLE_SELECTORS = ['#title', 'h2'];
+const DURATION_SELECTORS = ['ytd-thumbnail-overlay-time-status-renderer', 'yt-thumbnail-badge-view-model', '.yt-badge-shape__text'];
 
 const SWEEP_INTERVAL_MS = 1500;
 
@@ -51,6 +53,7 @@ export const extractCardInfo = (card: Element): CardInfo => ({
 	text: card.textContent ?? '',
 	hrefs: Array.from(card.querySelectorAll('a[href]'), a => a.getAttribute('href') ?? ''),
 	hasArtistBadge: card.querySelector(ARTIST_BADGE_SELECTOR) != null,
+	durationText: firstText(card, DURATION_SELECTORS),
 });
 
 export class MusicScanner {
@@ -65,27 +68,30 @@ export class MusicScanner {
 
 	// Distinct items hidden since the page loaded, so recycled cards and re-scans aren't counted twice
 	private seen = new Set<string>();
-	private pendingCount = 0;
+	private pending: Record<'music' | 'short', number> = { music: 0, short: 0 };
 	private reportTimer?: ReturnType<typeof setTimeout>;
 
 	/** onHidden is called (batched) with the number of newly hidden items. */
-	constructor(private onHidden: (count: number) => void = () => {}) {}
+	constructor(private onHidden: (kind: 'music' | 'short', count: number) => void = () => {}) {}
 
-	private countNew(key: string) {
+	private musicEnabled = true;
+
+	private countNew(key: string, kind: 'music' | 'short') {
 		if (this.seen.has(key)) return;
 		this.seen.add(key);
-		this.pendingCount++;
+		this.pending[kind]++;
 		this.reportTimer ??= setTimeout(() => {
-			const n = this.pendingCount;
-			this.pendingCount = 0;
+			const counts = this.pending;
+			this.pending = { music: 0, short: 0 };
 			this.reportTimer = undefined;
-			if (n > 0) this.onHidden(n);
+			for (const k of ['music', 'short'] as const) if (counts[k] > 0) this.onHidden(k, counts[k]);
 		}, 1500);
 	}
 
 	/** Turn the scanner on or off and give it the latest settings. Safe to call repeatedly. */
-	update({ active, settings }: { active: boolean; settings: MusicFilterSettings }) {
+	update({ active, settings, musicEnabled }: { active: boolean; settings: MusicFilterSettings; musicEnabled: boolean }) {
 		this.settings = settings;
+		this.musicEnabled = musicEnabled;
 		this.active = active;
 
 		if (active) {
@@ -182,22 +188,29 @@ export class MusicScanner {
 		if (!this.active || !el.isConnected) return;
 
 		const surface = surfaceForPath(window.location.pathname);
-		let hide: boolean;
+		let hide = false;
+		let kind: 'music' | 'short' = 'music';
 		let key = '';
 		if (el.matches(SHELF_SELECTOR)) {
 			const title = firstText(el, SHELF_TITLE_SELECTORS);
-			hide = shouldHideShelf(title, this.settings, surface);
+			hide = this.musicEnabled && shouldHideShelf(title, this.settings, surface);
 			key = `shelf:${title}`;
 		} else {
 			const info = extractCardInfo(el);
-			hide = classifyCard(info, this.settings, surface).hide;
-			if (hide) key = cardKey(info);
+			key = cardKey(info);
+			if (this.musicEnabled && classifyCard(info, this.settings, surface).hide) {
+				hide = true;
+				kind = 'music';
+			} else if (this.settings.surfaces[surface] && isTooShort(parseDurationSeconds(info.durationText ?? ''), this.settings.minDurationMin)) {
+				hide = true;
+				kind = 'short';
+			}
 		}
 
 		if (hide !== el.hasAttribute(HIDDEN_ATTR)) {
 			if (hide) {
 				el.setAttribute(HIDDEN_ATTR, '');
-				this.countNew(key);
+				this.countNew(key, kind);
 			} else {
 				el.removeAttribute(HIDDEN_ATTR);
 			}

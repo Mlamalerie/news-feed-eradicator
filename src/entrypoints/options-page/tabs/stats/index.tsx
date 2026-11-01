@@ -7,6 +7,7 @@ import { useOptionsPageState } from "../../state";
 
 const KIND_LABEL: Record<string, string> = {
 	music: 'music videos and shelves hidden',
+	short: 'videos shorter than your minimum hidden',
 	feed: 'feeds replaced by a quote',
 };
 

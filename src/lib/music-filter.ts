@@ -22,6 +22,8 @@ export type MusicFilterSettings = {
 	surfaces: Record<MusicSurface, boolean>;
 	/** Channels that are never hidden (substring match, case and accent insensitive) */
 	allowChannels: string[];
+	/** Hide videos shorter than this many minutes (0 = off) */
+	minDurationMin: number;
 	/** Extra words/phrases that hide a video when found in its title (case and accent insensitive) */
 	blockKeywords: string[];
 };
@@ -44,6 +46,7 @@ export const defaultMusicFilterSettings = (): MusicFilterSettings => ({
 	},
 	allowChannels: [],
 	blockKeywords: [],
+	minDurationMin: 0,
 });
 
 export type CardInfo = {
@@ -55,6 +58,8 @@ export type CardInfo = {
 	text: string;
 	/** href of every link inside the card */
 	hrefs: string[];
+	/** Duration shown on the thumbnail, e.g. "12:34" (optional) */
+	durationText?: string;
 	/** True if the card shows the Official Artist Channel badge */
 	hasArtistBadge: boolean;
 };
@@ -161,6 +166,11 @@ export const parseList = (text: string): string[] => {
 const asBool = (v: unknown, fallback: boolean): boolean => (typeof v === 'boolean' ? v : fallback);
 const asList = (v: unknown): string[] => (Array.isArray(v) ? parseList(v.filter(x => typeof x === 'string').join('\n')) : []);
 
+const asMinutes = (v: unknown): number => {
+	const n = Math.floor(Number(v));
+	return Number.isFinite(n) && n >= 0 && n <= 240 ? n : 0;
+};
+
 /** Accepts anything read from storage and returns a complete, valid settings object. */
 export const sanitizeMusicFilter = (raw: unknown): MusicFilterSettings => {
 	const d = defaultMusicFilterSettings();
@@ -182,6 +192,7 @@ export const sanitizeMusicFilter = (raw: unknown): MusicFilterSettings => {
 			other: asBool(r.surfaces?.other, d.surfaces.other),
 		},
 		allowChannels: asList(r.allowChannels),
+		minDurationMin: asMinutes(r.minDurationMin),
 		blockKeywords: asList(r.blockKeywords),
 	};
 };

@@ -16,7 +16,7 @@ import { defaultMusicFilterSettings, type MusicFilterSettings } from '/lib/music
 
 const browser = getBrowser();
 
-const recordStats = (kind: 'music' | 'feed', count: number) => {
+const recordStats = (kind: 'music' | 'short' | 'feed', count: number) => {
 	if (state.siteId == null) return;
 	sendMessage({ type: 'recordStats', siteId: state.siteId, kind, count })?.catch?.(() => {});
 };
@@ -51,7 +51,7 @@ setInterval(async () => {
 	}
 }, HEARTBEAT_MS);
 
-const musicScanner = new MusicScanner(count => recordStats('music', count));
+const musicScanner = new MusicScanner((kind, count) => recordStats(kind, count));
 
 const token = Math.floor(Math.random() * 1000000);
 
@@ -350,8 +350,10 @@ const patchState = (regions: DesiredRegionState[], musicFilter: MusicFilterSetti
 	// The music region ('artist-channels') is the master switch for the text-based music scanner,
 	// which handles what plain CSS selectors can't (Topic channels, keywords, allow list).
 	const musicRegion = regions.find(r => r.config.id === 'artist-channels');
+	const musicOn = musicRegion?.enabled === true;
 	musicScanner.update({
-		active: musicFilter != null && musicRegion?.enabled === true,
+		active: musicFilter != null && (musicOn || (musicFilter.minDurationMin ?? 0) > 0),
+		musicEnabled: musicOn,
 		settings: musicFilter ?? defaultMusicFilterSettings(),
 	});
 }
