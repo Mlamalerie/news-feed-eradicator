@@ -1,7 +1,7 @@
 import { getBrowser, type MessageSender, type TabId } from '/lib/webextension';
 import type { Path, PathList, Region, Site, SiteId } from '/types/sitelist';
 import type { DesiredRegionState, RequestQuoteResponse, FromServiceWorkerMessage, ToServiceWorkerMessage } from '/messaging/messages';
-import { loadHideQuotes, loadQuoteLists, loadRegionHideStyle, loadRegionsForSite, loadSitelist, loadSnoozeUntil, loadWidgetStyle, migrationPromise, saveQuoteEnabled, saveSiteEnabled, saveSnoozeUntil, saveThemeForSite } from '/storage/storage';
+import { loadHideQuotes, loadMusicFilter, loadQuoteLists, loadRegionHideStyle, loadRegionsForSite, loadSitelist, loadSnoozeUntil, loadWidgetStyle, migrationPromise, saveQuoteEnabled, saveSiteEnabled, saveSnoozeUntil, saveThemeForSite } from '/storage/storage';
 import { originsForSite } from '/lib/util';
 import { BuiltinQuotes, type Quote } from '/quote';
 import type { QuoteListId, StorageLocalV2, Theme } from '/storage/schema';
@@ -157,10 +157,11 @@ const handleMessage = async (msg: ToServiceWorkerMessage, sender: MessageSender)
 		const site = siteList.sites.find(site => site.hosts.includes(url.host));
 
 		if (site != null) {
-			const [siteOptions, regionHideStyle, widgetStyle] = await Promise.all([
+			const [siteOptions, regionHideStyle, widgetStyle, musicFilter] = await Promise.all([
 				loadRegionsForSite(site.id),
 				loadRegionHideStyle(),
 				loadWidgetStyle(),
+				site.id === 'youtube' ? loadMusicFilter() : null,
 			]);
 
 			let regions = site.regions
@@ -185,6 +186,7 @@ const handleMessage = async (msg: ToServiceWorkerMessage, sender: MessageSender)
 				siteId: site.id,
 				widgetStyle,
 				hideQuotes,
+				musicFilter,
 				theme: {
 					css: theme === 'light' ? themeLight : themeDark,
 					id: theme,

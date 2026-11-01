@@ -1,5 +1,6 @@
 import type { RegionId, SiteId } from "../types/sitelist";
 import type { Quote, QuoteV1 } from "../quote";
+import type { MusicFilterSettings } from "../lib/music-filter";
 
 export const CURRENT_STORAGE_SCHEMA_VERSION = 2;
 
@@ -19,6 +20,7 @@ export type StorageLocalV2 = {
 	quoteLists?: QuoteList[];
 	widgetStyle?: 'contained' | 'transparent';
 	regionHideStyle?: 'blur' | 'hidden';
+	musicFilter?: MusicFilterSettings;
 };
 
 export type QuoteList = {

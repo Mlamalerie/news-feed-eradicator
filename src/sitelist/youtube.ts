@@ -109,34 +109,25 @@ export const site: Site = {
 				},
 				{
 					id: regionId('artist-channels'),
-					title: 'Music (official artist channels)',
+					title: 'Music (artist channels, mixes, music videos)',
 					type: 'remove',
 					paths: '*',
 					default: false,
-					// Hides any thumbnail whose channel carries the Official Artist Channel
-					// badge, which is distinct from the plain verified tick.
+					// This region is the master switch for the music filter. Detection that needs
+					// to read text (Official Artist badge, "- Topic" channels, Mixes, title
+					// keywords, the allow list) lives in the content script - see
+					// entrypoints/intercept/music-scanner.ts and lib/music-filter.ts. Settings are in
+					// the options page under Sites > YouTube.
 					//
-					// In the current view-model DOM the badge is NOT a `badge-shape` element:
-					// it is a 14x14 icon inlined into the channel name's attributed string,
-					// wrapped in `.ytAttributedStringImageElement`. That wrapper is shared
-					// with the ordinary verified tick, so the only discriminator is the SVG
-					// path data - the OAC badge draws a scalloped rosette starting
-					// "M9.03 2.242", the verified tick draws a circle starting "M12 1C5.925".
-					// Verified against a live home feed: the rosette matched only music
-					// channels, the circle only non-music ones.
+					// The CSS below only covers static navigation links to YouTube Music.
 					//
 					// Never put a comma inside :has() - sanitizeSelector() in the service
 					// worker strips commas per-selector, silently turning :has(a, b) into
 					// the descendant combinator :has(a b). Use separate entries for "or".
 					selectors: [
-						'ytd-rich-item-renderer:has(.ytAttributedStringImageElement path[d^="M9.03 2.242"])',
-						'yt-lockup-view-model:has(.ytAttributedStringImageElement path[d^="M9.03 2.242"])',
-						'ytd-video-renderer:has(.ytAttributedStringImageElement path[d^="M9.03 2.242"])',
-						'ytd-compact-video-renderer:has(.ytAttributedStringImageElement path[d^="M9.03 2.242"])',
-						// Legacy Polymer DOM, still served on some surfaces. No-op otherwise.
-						'ytd-rich-item-renderer:has(.badge-style-type-verified-artist)',
-						'ytd-video-renderer:has(.badge-style-type-verified-artist)',
-						'ytd-compact-video-renderer:has(.badge-style-type-verified-artist)',
+						'ytd-guide-entry-renderer:has(a[href*="music.youtube.com"])',
+						'ytd-mini-guide-entry-renderer:has(a[href*="music.youtube.com"])',
+						'ytd-guide-entry-renderer:has(a[title="YouTube Music"])',
 					],
 				},
 			],

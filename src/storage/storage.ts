@@ -2,6 +2,7 @@ import { generateId } from "../lib/generate-id";
 import { getBrowser } from "../lib/webextension";
 import type { Quote } from "../quote";
 import type { RegionId, SiteId, SiteList } from "../types/sitelist";
+import { sanitizeMusicFilter, type MusicFilterSettings } from "../lib/music-filter";
 import { type StorageSyncV1, SiteStateTagV1, type StorageLocal, type StorageLocalV2, CURRENT_STORAGE_SCHEMA_VERSION, type SiteConfig, type Theme, defaultQuoteLists, type QuoteListId, type QuoteList, BUILTIN_QUOTE_LIST_ID, type SnoozeMode } from "./schema";
 
 const ensureMigrated = async (): Promise<void> => {
@@ -87,6 +88,9 @@ export const saveRegionHideStyle = (regionHideStyle: StorageLocalV2['regionHideS
 
 export const loadWidgetStyle = () => getKey('widgetStyle', 'contained');
 export const saveWidgetStyle = (widgetTheme: StorageLocalV2['widgetStyle']) => setKey('widgetStyle', widgetTheme);
+
+export const loadMusicFilter = async (): Promise<MusicFilterSettings> => sanitizeMusicFilter(await getKey('musicFilter'));
+export const saveMusicFilter = (settings: MusicFilterSettings) => setKey('musicFilter', sanitizeMusicFilter(settings));
 
 export const loadHideQuotes = () => getKey('hideQuotes', false);
 export const saveHideQuotes = (hideQuotes: boolean) => setKey('hideQuotes', hideQuotes);

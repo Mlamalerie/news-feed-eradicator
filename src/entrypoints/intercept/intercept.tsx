@@ -8,8 +8,12 @@ import nfeStyles from './nfe-container.css?raw';
 import sharedStyles from '../../shared/styles.css?raw';
 import type { Theme } from '../../storage/schema';
 import { signalObj, type SignalObj } from '/lib/solid-util';
+import { MusicScanner } from './music-scanner';
+import { defaultMusicFilterSettings, type MusicFilterSettings } from '/lib/music-filter';
 
 const browser = getBrowser();
+
+const musicScanner = new MusicScanner();
 
 const token = Math.floor(Math.random() * 1000000);
 
@@ -246,7 +250,7 @@ const setSnoozeTimer = (snoozeUntil: number | null) => {
 /**
  * Calculate desired state from
  */
-const patchState = (regions: DesiredRegionState[]) => {
+const patchState = (regions: DesiredRegionState[], musicFilter: MusicFilterSettings | null) => {
 	let seenRegions: Set<RegionId> = new Set();
 
 	for (var region of regions) {
@@ -303,6 +307,14 @@ const patchState = (regions: DesiredRegionState[]) => {
 	}
 
 	setCss(css);
+
+	// The music region ('artist-channels') is the master switch for the text-based music scanner,
+	// which handles what plain CSS selectors can't (Topic channels, keywords, allow list).
+	const musicRegion = regions.find(r => r.config.id === 'artist-channels');
+	musicScanner.update({
+		active: musicFilter != null && musicRegion?.enabled === true,
+		settings: musicFilter ?? defaultMusicFilterSettings(),
+	});
 }
 
 const isRegionBlockActive = (region: RegionState) => region.enabled && !isSnoozing()
@@ -323,7 +335,7 @@ browser.runtime.onMessage.addListener(async (msg: FromServiceWorkerMessage) => {
 		state.theme.id.set(msg.theme.id);
 
 		domReady.then(() => {
-			patchState(msg.regions);
+			patchState(msg.regions, msg.musicFilter);
 		});
 	}
 

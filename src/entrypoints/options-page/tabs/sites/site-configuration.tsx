@@ -4,6 +4,7 @@ import { loadRegionsForSite, setRegionEnabledForSite } from "/storage/storage";
 import { sendToServiceWorker } from "/messaging/messages";
 import { expect } from "/lib/util";
 import { useOptionsPageState } from "../../state";
+import { YoutubeMusicSettings } from "./youtube-music-settings";
 
 export const SiteConfigPanel = ({ site } : { site: Accessor<Site | null> }) => {
 	const [siteRegions, { refetch }] = createResource(async () => {
@@ -33,6 +34,9 @@ export const SiteConfigPanel = ({ site } : { site: Accessor<Site | null> }) => {
 				</li>}
 			</For>
 		</ul>
+		<Show when={expect(site()).id === 'youtube'}>
+			<YoutubeMusicSettings />
+		</Show>
 	</div>
 }
 
