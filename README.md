@@ -9,7 +9,7 @@ This is a fork of [News Feed Eradicator](https://github.com/jordwest/news-feed-e
 ## What it does on YouTube
 
 - Hides **Shorts** (shelves, thumbnails, the sidebar button).
-- Hides **music** when the "Music" region is switched on in the options page (off by default). What counts as music is configurable under **Sites > YouTube**:
+- Hides **music** (on by default; the "Music" region can be switched off in the options page). What counts as music is configurable under **Sites > YouTube**:
   - videos from **official artist channels** (the rosette badge),
   - auto-generated **"Artist - Topic"** channels,
   - **Mixes** and auto-generated album playlists,
@@ -18,6 +18,10 @@ This is a fork of [News Feed Eradicator](https://github.com/jordwest/news-feed-e
   - the **YouTube Music** link in the sidebar.
 - Choose **where** it applies: home, search, suggestions next to a video, and "everywhere else" (subscriptions, channel pages, playlists, history; off by default).
 - **Never hide** a list of channels (one per line), and **also hide** titles containing your own words.
+
+## Other sites
+
+TikTok (feeds), Instagram (feed, stories, suggestions, Explore, Reels), X (feed, "For you" posts, trends and news), plus the sites supported by the original project. Switch each site on in the options page; the browser asks for permission per site.
 
 Also available on YouTube: hide the main feed, suggested videos, comments, live chat, notifications and subscriptions.
 

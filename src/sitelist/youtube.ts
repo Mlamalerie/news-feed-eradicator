@@ -112,7 +112,6 @@ export const site: Site = {
 					title: 'Music (artist channels, mixes, music videos)',
 					type: 'remove',
 					paths: '*',
-					default: false,
 					// This region is the master switch for the music filter. Detection that needs
 					// to read text (Official Artist badge, "- Topic" channels, Mixes, title
 					// keywords, the allow list) lives in the content script - see

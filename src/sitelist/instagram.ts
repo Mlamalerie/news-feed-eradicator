@@ -32,6 +32,24 @@ export const site: Site = {
 			selectors: ['div:has(> div > a[href="/explore/people/"])']
 		},
 		{
+			id: regionId('reels-page'),
+			title: 'Reels page',
+			type: 'hide',
+			paths: [{ regexp: '^/reels(/.*)?$' }],
+			selectors: ['main'],
+			inject: {
+				mode: 'overlay-fixed',
+				overlayZIndex: 2000,
+			},
+		},
+		{
+			id: regionId('reels-button'),
+			title: 'Reels button',
+			type: 'remove',
+			paths: '*',
+			selectors: ['div:has(> a[href="/reels/"])', 'a[href="/reels/"]'],
+		},
+		{
             id: regionId('explore-suggestions'),
             title: 'Explore Suggestions',
             type: 'remove',

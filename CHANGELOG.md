@@ -7,8 +7,11 @@
 First release of this fork, renamed Silent Feed. Based on News Feed Eradicator 3.0.5.
 
 - YouTube: Hide Shorts shelves and thumbnails on home, subscriptions and search
-- YouTube: Music filter (off by default): official artist channels, "- Topic" channels, Mixes and album playlists, music video titles, music shelves and the YouTube Music link
+- YouTube: Music filter (on by default): official artist channels, "- Topic" channels, Mixes and album playlists, music video titles, music shelves and the YouTube Music link
 - YouTube: Music filter settings: choose which detectors and pages apply, keep specific channels, add your own title keywords
+- TikTok: hide the For You / Following / Explore / Live feeds (new site, selectors unverified)
+- Instagram: hide the Reels page and the Reels button
+- Merged upstream News Feed Eradicator changes (Facebook and LinkedIn feed fixes)
 - Renamed, new extension id, new About page with credits to the original project
 
 ## [3.0.5] - 2026-07-16
