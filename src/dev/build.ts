@@ -120,7 +120,11 @@ async function buildIntercept(): Promise<void> {
 }
 
 async function buildManifest(): Promise<void> {
-	Bun.write('./build/manifest.json', JSON.stringify(manifest, null, 2));
+	// Only ask for the hosts of the supported sites (each one is still requested at runtime, when
+	// the user switches that site on), instead of every website.
+	const siteList = await Bun.file('./build/sitelist.json').json();
+	const origins = siteList.sites.flatMap((s: { hosts: string[] }) => s.hosts.flatMap(h => [`http://${h}/*`, `https://${h}/*`]));
+	await Bun.write('./build/manifest.json', JSON.stringify({ ...manifest, optional_host_permissions: [...new Set(origins)] }, null, 2));
 }
 
 async function buildOptionsPage(): Promise<void> {

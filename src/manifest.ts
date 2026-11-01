@@ -42,7 +42,7 @@ export default {
 	],
 	"browser_specific_settings": {
 		"gecko": {
-			"id": "@silent-feed"
+			"id": "@scroll-less"
 		},
 		"gecko_android": {
 			"strict_min_version": "113.0"

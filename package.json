@@ -1,7 +1,7 @@
 {
-  "name": "silent-feed",
-  "title": "Silent Feed",
-  "description": "Hide music, Shorts and other distractions on YouTube and your feeds",
+  "name": "scroll-less",
+  "title": "Scroll Less",
+  "description": "Hide feeds, Shorts and music, and set schedules and time limits for distracting sites. Choose what you watch.",
   "author": "Mlamali The Engineer / Mlamali Said Salimo (fork of News Feed Eradicator by Jordan West)",
   "license": "AGPL-3.0-only",
   "version": "0.1.0",

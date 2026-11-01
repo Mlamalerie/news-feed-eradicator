@@ -7,12 +7,12 @@ build: install
 	rm -rf build
 	bun run src/dev/build.ts
 	mkdir -p dist
-	(cd build && zip -r ../dist/NewsFeedEradicator_$(GITTAG).zip .)
+	(cd build && zip -r ../dist/ScrollLess_$(GITTAG).zip .)
 
 # Firefox Add-on store requires source to be submitted as a zip, so this command builds that zip
 package-source:
 	mkdir -p dist
-	git archive --output=dist/NewsFeedEradicator_source_$(GITTAG).zip HEAD
+	git archive --output=dist/ScrollLess_source_$(GITTAG).zip HEAD
 
 dev: install
 	bun run src/dev/build.ts --watch

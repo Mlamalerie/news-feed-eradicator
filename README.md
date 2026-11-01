@@ -1,10 +1,10 @@
-# Silent Feed
+# Scroll Less
 
 A browser extension that hides music, Shorts and other feed distractions on YouTube (and replaces feeds on a few other sites with a quote).
 
 *By [Mlamali The Engineer](https://github.com/Mlamalerie).*
 
-> The working name "Silent Feed" is a placeholder: it is set in one place (`title` in `package.json`).
+> The name is set in one place: `title` in `package.json`.
 
 **This is a fork of [News Feed Eradicator](https://github.com/jordwest/news-feed-eradicator), created by [Jordan West](https://west.io/) and its [contributors](https://github.com/jordwest/news-feed-eradicator/graphs/contributors).** The engine, the options page, the quote widget and most supported sites are theirs. It keeps the original AGPL-3.0 licence (see `LICENSE` and [`NOTICE.md`](NOTICE.md) for full credits and third-party notices).
 
@@ -50,6 +50,10 @@ Also available on YouTube: hide the main feed, suggested videos, comments, live 
 YouTube changes its page markup often. The music filter reads the page text and a few markup details (the artist badge, `list=RD` links), so a YouTube redesign can break a detector until it is updated. Title patterns are heuristics and can miss or over-match; use the allow list and your own keywords to tune them.
 
 ---
+
+## Publishing
+
+Store listing texts, permission justifications and images are in [`store/`](store/LISTING.md); the privacy policy is [`PRIVACY.md`](PRIVACY.md).
 
 ## Development
 
