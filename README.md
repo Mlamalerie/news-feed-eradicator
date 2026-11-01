@@ -2,9 +2,17 @@
 
 A browser extension that hides music, Shorts and other feed distractions on YouTube (and replaces feeds on a few other sites with a quote).
 
+*By [Mlamali The Engineer](https://github.com/Mlamalerie).*
+
 > The working name "Silent Feed" is a placeholder: it is set in one place (`title` in `package.json`).
 
 **This is a fork of [News Feed Eradicator](https://github.com/jordwest/news-feed-eradicator), created by [Jordan West](https://west.io/) and its [contributors](https://github.com/jordwest/news-feed-eradicator/graphs/contributors).** The engine, the options page, the quote widget and most supported sites are theirs. It keeps the original AGPL-3.0 licence (see `LICENSE` and [`NOTICE.md`](NOTICE.md) for full credits and third-party notices).
+
+## Why this exists
+
+I wanted to stop losing time on social media (X, Instagram and above all TikTok), and on YouTube I wanted to choose videos on purpose instead of being carried along by the algorithm. I also used to think background music made me more productive. It did not: it was one more thing pulling my attention away from what matters to me. So this fork hides the feeds, the recommendations and the music, and leaves what I came for: searching, picking something intentionally, and watching it.
+
+*Pourquoi ce projet : perdre moins de temps sur X, Instagram et surtout TikTok, et sur YouTube choisir mes vidéos volontairement plutôt que de me laisser happer par l'algorithme, sans musique qui ne sert à rien dans ma vie. Je pensais que la musique me rendait plus productif, ce n'était pas le cas.*
 
 ## What it does on YouTube
 

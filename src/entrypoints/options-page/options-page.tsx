@@ -97,7 +97,7 @@ const OptionsPage = () => {
 
 				<footer class="text-center space-y-4">
 					<div>
-						Fork of <a href="https://github.com/jordwest/news-feed-eradicator">News Feed Eradicator</a> by <a href="https://west.io/">Jordan West</a> and <a href="https://github.com/jordwest/news-feed-eradicator/graphs/contributors">contributors</a>. Licensed under AGPL-3.0, <a href="https://github.com/Mlamalerie/news-feed-eradicator">source code</a>.
+						Made by <a href="https://github.com/Mlamalerie">Mlamali The Engineer</a>. Fork of <a href="https://github.com/jordwest/news-feed-eradicator">News Feed Eradicator</a> by <a href="https://west.io/">Jordan West</a> and <a href="https://github.com/jordwest/news-feed-eradicator/graphs/contributors">contributors</a>. Licensed under AGPL-3.0, <a href="https://github.com/Mlamalerie/news-feed-eradicator">source code</a>.
 					</div>
 					<div class="text-secondary font-xs">{versionText()}</div>
 				</footer>

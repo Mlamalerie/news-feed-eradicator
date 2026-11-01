@@ -17,7 +17,7 @@ export const AboutTabContent = () => {
 				</div>
 
 				<div class="prose">
-					<p>Silent Feed is made by Mlamali Said Salimo. Site logos come from <a href="https://simpleicons.org/">Simple Icons</a> and belong to their respective owners; see <a href={`${REPO}/blob/main/NOTICE.md`}>NOTICE.md</a> for all credits.</p>
+					<p>Silent Feed is made by Mlamali Said Salimo (<a href="https://github.com/Mlamalerie">Mlamali The Engineer</a>). Site logos come from <a href="https://simpleicons.org/">Simple Icons</a> and belong to their respective owners; see <a href={`${REPO}/blob/main/NOTICE.md`}>NOTICE.md</a> for all credits.</p>
 				</div>
 
 				<div class="prose">

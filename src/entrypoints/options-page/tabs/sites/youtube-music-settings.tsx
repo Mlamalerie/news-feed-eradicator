@@ -37,9 +37,22 @@ export const YoutubeMusicSettings = () => {
 	return <Show when={settings()}>{s => <div class="py-4 space-y-2">
 		<div class="px-4">
 			<h4 class="font flex-1 text-figure-500 font-bold">Music filter</h4>
-			<p class="font-xs text-secondary">Applies when the "Music" region above is on.</p>
+			<p class="font-xs text-secondary">Applies when the "Music" region above is on. The defaults hide most music; you only need this to keep a channel.</p>
 		</div>
 
+		<div class="px-4 pt-2 space-y-1">
+			<label class="block font-xs text-secondary font-bold" for="music-allow">Never hide these channels</label>
+			<textarea id="music-allow" class="w-full" rows="4" disabled={state.settingsLockedDown()}
+				placeholder="One channel name per line"
+				value={s().allowChannels.join('\n')}
+				onChange={e => update(v => { v.allowChannels = parseList(e.currentTarget.value); return v; })} />
+			<p class="font-xs text-secondary">Case and accents are ignored. "Daft Punk" also keeps "Daft Punk - Topic".</p>
+		</div>
+
+
+		<details class="px-4 pt-2">
+			<summary class="cursor-pointer font-xs text-secondary font-bold">Advanced: what counts as music, where, extra words</summary>
+			<div class="space-y-2 pt-2">
 		<div class="px-4"><h5 class="font-xs text-secondary font-bold">What counts as music</h5></div>
 		{DETECTORS.map(d => <label class="flex cross-center cursor-pointer hoverable px-4">
 			<input type="checkbox" class="toggle" disabled={state.settingsLockedDown()}
@@ -60,20 +73,13 @@ export const YoutubeMusicSettings = () => {
 		</label>)}
 
 		<div class="px-4 pt-2 space-y-1">
-			<label class="block font-xs text-secondary font-bold" for="music-allow">Never hide these channels</label>
-			<textarea id="music-allow" class="w-full" rows="4" disabled={state.settingsLockedDown()}
-				placeholder="One channel name per line"
-				value={s().allowChannels.join('\n')}
-				onChange={e => update(v => { v.allowChannels = parseList(e.currentTarget.value); return v; })} />
-			<p class="font-xs text-secondary">Case and accents are ignored. "Daft Punk" also keeps "Daft Punk - Topic".</p>
-		</div>
-
-		<div class="px-4 pt-2 space-y-1">
 			<label class="block font-xs text-secondary font-bold" for="music-block">Also hide titles containing</label>
 			<textarea id="music-block" class="w-full" rows="4" disabled={state.settingsLockedDown()}
 				placeholder="One word or phrase per line, e.g. remix"
 				value={s().blockKeywords.join('\n')}
 				onChange={e => update(v => { v.blockKeywords = parseList(e.currentTarget.value); return v; })} />
 		</div>
+			</div>
+		</details>
 	</div>}</Show>;
 };

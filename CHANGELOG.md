@@ -13,6 +13,7 @@ First release of this fork, renamed Silent Feed. Based on News Feed Eradicator 3
 - Instagram: hide the Reels page and the Reels button
 - Statistics: toolbar badge with today's total and a Statistics tab (last 7 days, 30-day totals)
 - 22 French quotes (verified against their sources) and a quote language setting
+- Music filter settings: detailed options moved into a collapsed Advanced section
 - New icon, site logos in the options page, credits in NOTICE.md
 - Merged upstream News Feed Eradicator changes (Facebook and LinkedIn feed fixes)
 - Renamed, new extension id, new About page with credits to the original project

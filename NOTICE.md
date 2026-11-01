@@ -8,7 +8,7 @@ The original project and this fork are released under the **GNU Affero General P
 
 ## What this fork adds
 
-By Mlamali Said Salimo: the YouTube music filter and its settings, Shorts hiding, TikTok support, Instagram Reels, French quotes, the statistics page, site logos and the new icon.
+By Mlamali Said Salimo ("Mlamali The Engineer", [@Mlamalerie](https://github.com/Mlamalerie)): the YouTube music filter and its settings, Shorts hiding, TikTok support, Instagram Reels, French quotes, the statistics page, site logos and the new icon.
 
 ## Third-party material
 
