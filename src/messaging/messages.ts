@@ -42,7 +42,15 @@ type OptionsUpdated = {
 	type: 'nfe#optionsUpdated',
 }
 
-export type ToServiceWorkerMessage = RequestSiteDetails | OpenOptionsPage | NotifyOptionsUpdated | SetSiteTheme | EnableSite | DisableSite | Snooze | RequestQuote | SetQuoteEnabled | ReadSnooze;
+export type ToServiceWorkerMessage = RecordStats | RequestSiteDetails | OpenOptionsPage | NotifyOptionsUpdated | SetSiteTheme | EnableSite | DisableSite | Snooze | RequestQuote | SetQuoteEnabled | ReadSnooze;
+
+// Report that the content script hid something, for the statistics page and the toolbar badge.
+type RecordStats = {
+	type: 'recordStats',
+	siteId: SiteId,
+	kind: 'music' | 'feed',
+	count: number,
+};
 
 // Request site details from service worker.
 type RequestSiteDetails = {

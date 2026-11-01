@@ -5,6 +5,7 @@ import { sendToServiceWorker } from "/messaging/messages";
 import { expect } from "/lib/util";
 import { useOptionsPageState } from "../../state";
 import { YoutubeMusicSettings } from "./youtube-music-settings";
+import { SiteLogo } from "/shared/components/site-logo";
 
 export const SiteConfigPanel = ({ site } : { site: Accessor<Site | null> }) => {
 	const [siteRegions, { refetch }] = createResource(async () => {
@@ -21,6 +22,7 @@ export const SiteConfigPanel = ({ site } : { site: Accessor<Site | null> }) => {
 
 	return <div class="space-y-2 py-4">
 		<div class="px-4 flex space-x-2 cross-end">
+			<SiteLogo siteId={expect(site()).id} size={32} />
 			<h3 class="font-lg flex-1 text-figure-500 font-bold">{expect(site()).title}</h3>
 			<a class="font-sm hover:underline" target="_blank" href={`https://${expect(site()?.hosts[0])}`}>Visit site</a>
 		</div>

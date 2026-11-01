@@ -26,6 +26,17 @@ export const StyleTabContent = () => {
 					</div>
 				</div>
 			</Toggle>
+			<label class="flex cross-center p-4 gap-2">
+				<span class="flex-1 space-y-1">
+					<span class="block">Language of the built-in quotes</span>
+					<span class="block text-secondary font-xs">Your own quotes are always shown.</span>
+				</span>
+				<select value={state.storage.quoteLanguage.get() ?? 'all'} onChange={e => state.storage.setQuoteLanguage(e.currentTarget.value as 'all' | 'en' | 'fr')}>
+					<option value="all">English and Français</option>
+					<option value="en">English</option>
+					<option value="fr">Français</option>
+				</select>
+			</label>
 		</div>
 	);
 };

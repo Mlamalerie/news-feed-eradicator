@@ -1,8 +1,9 @@
 import { getBrowser, type MessageSender, type TabId } from '/lib/webextension';
 import type { Path, PathList, Region, Site, SiteId } from '/types/sitelist';
 import type { DesiredRegionState, RequestQuoteResponse, FromServiceWorkerMessage, ToServiceWorkerMessage } from '/messaging/messages';
-import { loadHideQuotes, loadMusicFilter, loadQuoteLists, loadRegionHideStyle, loadRegionsForSite, loadSitelist, loadSnoozeUntil, loadWidgetStyle, migrationPromise, saveQuoteEnabled, saveSiteEnabled, saveSnoozeUntil, saveThemeForSite } from '/storage/storage';
+import { loadHideQuotes, addStat, loadStats, loadMusicFilter, loadQuoteLanguage, loadQuoteLists, loadRegionHideStyle, loadRegionsForSite, loadSitelist, loadSnoozeUntil, loadWidgetStyle, migrationPromise, saveQuoteEnabled, saveSiteEnabled, saveSnoozeUntil, saveThemeForSite } from '/storage/storage';
 import { originsForSite } from '/lib/util';
+import { badgeText, dayTotal, localDate, statKey } from '/lib/stats';
 import { BuiltinQuotes, type Quote } from '/quote';
 import type { QuoteListId, StorageLocalV2, Theme } from '/storage/schema';
 import themeDark from '/themes/dark.css?raw';
@@ -12,6 +13,27 @@ const browser = getBrowser();
 browser.action.onClicked.addListener(() => {
 	browser.runtime.openOptionsPage();
 });
+
+// Toolbar badge: how much was hidden today. Updates are serialised so concurrent tabs can't lose counts.
+let statsQueue: Promise<unknown> = Promise.resolve();
+
+const refreshBadge = async () => {
+	const stats = await loadStats();
+	await browser.action.setBadgeBackgroundColor({ color: '#cc7744' });
+	await browser.action.setBadgeText({ text: badgeText(dayTotal(stats[localDate()])) });
+};
+
+const recordStats = (siteId: SiteId, kind: 'music' | 'feed', count: number) => {
+	if (!Number.isFinite(count) || count <= 0) return statsQueue;
+	statsQueue = statsQueue
+		.then(() => addStat(localDate(), statKey(siteId, kind), Math.min(Math.floor(count), 1000)))
+		.then(refreshBadge)
+		.catch(e => console.error('recordStats failed', e));
+	return statsQueue;
+};
+
+// The badge is per-day, so refresh it whenever the worker wakes up
+migrationPromise.then(refreshBadge).catch(() => {});
 
 const sendMessage = (tabId: TabId, message: FromServiceWorkerMessage) => browser.tabs.sendMessage(tabId, message);
 
@@ -120,7 +142,8 @@ const enableSite = async (siteId: SiteId) => {
 }
 
 const requestQuote = async () => {
-	const quoteLists = await loadQuoteLists();
+	const [quoteLists, quoteLanguage] = await Promise.all([loadQuoteLists(), loadQuoteLanguage()]);
+	const languageAllowed = (q: Quote) => quoteLanguage === 'all' || (q.lang ?? 'en') === quoteLanguage;
 
 	const activeQuotes: { quoteListId: QuoteListId, quote: Quote }[] = quoteLists
 		.filter(list => !list.disabled)
@@ -128,6 +151,7 @@ const requestQuote = async () => {
 			const listQuotes = list.quotes === 'builtin' ? BuiltinQuotes : list.quotes;
 			return listQuotes
 				.filter(q => !list.disabledQuoteIds.includes(q.id.toString()))
+				.filter(q => list.quotes !== 'builtin' || languageAllowed(q))
 				.map(q => ({ quoteListId: list.id, quote: q }))
 		}).flat();
 
@@ -143,6 +167,11 @@ const setSiteTheme = async (siteId: SiteId, theme: Theme | null) => {
 }
 
 const handleMessage = async (msg: ToServiceWorkerMessage, sender: MessageSender) => {
+	if (msg.type === 'recordStats') {
+		await recordStats(msg.siteId, msg.kind, msg.count);
+		return;
+	}
+
 	if (msg.type === 'requestSiteDetails') {
 		// TODO: Cache these?
 		const [siteList, snoozeUntil, hideQuotes] = await Promise.all([

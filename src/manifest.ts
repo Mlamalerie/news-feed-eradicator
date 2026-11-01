@@ -4,6 +4,8 @@ export default {
 	"name": packageJson.title,
 	"version": packageJson.version,
 	"description": packageJson.description,
+	"author": "Mlamali Said Salimo, based on News Feed Eradicator by Jordan West",
+	"homepage_url": "https://github.com/Mlamalerie/news-feed-eradicator",
 	"manifest_version": 3,
 	"permissions": ["storage", "scripting"],
 	"optional_host_permissions": ["*://*/*"],

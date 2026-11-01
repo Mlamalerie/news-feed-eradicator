@@ -13,7 +13,12 @@ import { defaultMusicFilterSettings, type MusicFilterSettings } from '/lib/music
 
 const browser = getBrowser();
 
-const musicScanner = new MusicScanner();
+const recordStats = (kind: 'music' | 'feed', count: number) => {
+	if (state.siteId == null) return;
+	sendMessage({ type: 'recordStats', siteId: state.siteId, kind, count })?.catch?.(() => {});
+};
+
+const musicScanner = new MusicScanner(count => recordStats('music', count));
 
 const token = Math.floor(Math.random() * 1000000);
 
@@ -51,6 +56,7 @@ type ContentScriptState = {
 	injectedPageStyleElement?: HTMLStyleElement;
 	siteId?: SiteId;
 	ready?: boolean;
+	countedPath?: string;
 	hideQuotes?: boolean;
 	widgetStyle: SignalObj<'contained' | 'transparent'>;
 	overlays: OverlayState[];
@@ -336,6 +342,13 @@ browser.runtime.onMessage.addListener(async (msg: FromServiceWorkerMessage) => {
 
 		domReady.then(() => {
 			patchState(msg.regions, msg.musicFilter);
+
+			// Count each page where a feed was replaced by a quote (once per path, not per options refresh)
+			const feedReplaced = !isSnoozing() && Array.from(state.regions.values()).some(r => r.config.inject != null && r.enabled);
+			if (feedReplaced && state.countedPath !== window.location.pathname) {
+				state.countedPath = window.location.pathname;
+				recordStats('feed', 1);
+			}
 		});
 	}
 

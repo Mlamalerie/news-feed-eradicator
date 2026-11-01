@@ -4,7 +4,7 @@ A browser extension that hides music, Shorts and other feed distractions on YouT
 
 > The working name "Silent Feed" is a placeholder: it is set in one place (`title` in `package.json`).
 
-This is a fork of [News Feed Eradicator](https://github.com/jordwest/news-feed-eradicator) by Jordan West and contributors. It keeps the original AGPL-3.0 licence (see `LICENSE`); the engine and the other supported sites come from that project.
+**This is a fork of [News Feed Eradicator](https://github.com/jordwest/news-feed-eradicator), created by [Jordan West](https://west.io/) and its [contributors](https://github.com/jordwest/news-feed-eradicator/graphs/contributors).** The engine, the options page, the quote widget and most supported sites are theirs. It keeps the original AGPL-3.0 licence (see `LICENSE` and [`NOTICE.md`](NOTICE.md) for full credits and third-party notices).
 
 ## What it does on YouTube
 
@@ -22,6 +22,10 @@ This is a fork of [News Feed Eradicator](https://github.com/jordwest/news-feed-e
 ## Other sites
 
 TikTok (feeds), Instagram (feed, stories, suggestions, Explore, Reels), X (feed, "For you" posts, trends and news), plus the sites supported by the original project. Switch each site on in the options page; the browser asks for permission per site.
+
+Quotes: the widget shows a quote in place of the feed. English quotes come from the original project; 22 French quotes (Pascal, Montaigne, Saint-Exupéry, Sénèque, Simone Weil...) were added, and you can choose the language under Style.
+
+Statistics: the toolbar icon shows how much was hidden today, and the Statistics tab shows the last 7 days and 30-day totals. Everything stays on your device.
 
 Also available on YouTube: hide the main feed, suggested videos, comments, live chat, notifications and subscriptions.
 

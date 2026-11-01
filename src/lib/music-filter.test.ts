@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { classifyCard, defaultMusicFilterSettings, normalize, parseList, sanitizeMusicFilter, shouldHideShelf, surfaceForPath, type CardInfo } from "./music-filter";
+import { cardKey, classifyCard, defaultMusicFilterSettings, normalize, parseList, sanitizeMusicFilter, shouldHideShelf, surfaceForPath, type CardInfo } from "./music-filter";
 
 const card = (over: Partial<CardInfo> = {}): CardInfo => ({
 	title: 'How to bake bread', channel: 'Baker Bob', text: 'How to bake bread Baker Bob 1M views', hrefs: ['/watch?v=abc'], hasArtistBadge: false, ...over,
@@ -110,5 +110,14 @@ describe('helpers', () => {
 		expect(partial.detect.mixes).toBe(true);
 		expect(partial.allowChannels).toEqual(['x']);
 		expect(partial.surfaces.other).toBe(false);
+	});
+});
+
+describe('cardKey', () => {
+	test('uses the video id, then the playlist id, then title + channel', () => {
+		const base = { title: 'T', channel: 'C', text: '', hasArtistBadge: false };
+		expect(cardKey({ ...base, hrefs: ['/watch?v=abcDEF12345&list=RDabc'] })).toBe('abcDEF12345');
+		expect(cardKey({ ...base, hrefs: ['/playlist?list=OLAK5uy_xyz'] })).toBe('OLAK5uy_xyz');
+		expect(cardKey({ ...base, hrefs: ['/@chan'], title: 'Été', channel: 'Chan' })).toBe('ete|chan');
 	});
 });

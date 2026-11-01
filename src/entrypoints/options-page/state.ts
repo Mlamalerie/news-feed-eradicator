@@ -35,7 +35,7 @@ type SiteState = {
 	permissionsEnabled: boolean,
 };
 
-export type PageId = 'sites' | 'snooze' | 'quotes' | 'style' | 'about' | 'debug';
+export type PageId = 'sites' | 'stats' | 'snooze' | 'quotes' | 'style' | 'about' | 'debug';
 
 const browser = getBrowser();
 

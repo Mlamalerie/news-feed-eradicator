@@ -15,6 +15,8 @@ type WebExtensionAPI = {
 	};
 	action: {
 		onClicked: WebExtensionEvent<void>;
+		setBadgeText: (details: { text: string }) => Promise<void>;
+		setBadgeBackgroundColor: (details: { color: string }) => Promise<void>;
 	};
 	permissions: {
 		getAll: () => Promise<Permissions>;

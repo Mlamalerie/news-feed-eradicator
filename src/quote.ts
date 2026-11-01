@@ -1,7 +1,11 @@
+export type QuoteLanguage = 'en' | 'fr';
+
 export type Quote = {
 	id: string;
 	text: string;
 	author: string;
+	/** Language of a builtin quote. Quotes without it are English. */
+	lang?: QuoteLanguage;
 };
 
 export type QuoteV1 = {
@@ -425,6 +429,138 @@ export const BuiltinQuotes: Array<Quote> = [
 		id: "251218",
 		text: "Slow is smooth, smooth is fast",
 		author: "Navy SEALs",
+	},
+	{
+		id: "261101",
+		text: "Tout le malheur des hommes vient d'une seule chose, qui est de ne savoir pas demeurer en repos dans une chambre.",
+		author: "Blaise Pascal",
+		lang: 'fr',
+	},
+	{
+		id: "261102",
+		text: "Je n'ai fait celle-ci plus longue que parce que je n'ai pas eu le loisir de la faire plus courte.",
+		author: "Blaise Pascal",
+		lang: 'fr',
+	},
+	{
+		id: "261103",
+		text: "Toute notre dignité consiste donc en la pensée.",
+		author: "Blaise Pascal",
+		lang: 'fr',
+	},
+	{
+		id: "261104",
+		text: "Tout notre mal vient de ne pouvoir être seuls.",
+		author: "Jean de La Bruyère",
+		lang: 'fr',
+	},
+	{
+		id: "261105",
+		text: "L'attention est la forme la plus rare et la plus pure de la générosité.",
+		author: "Simone Weil",
+		lang: 'fr',
+	},
+	{
+		id: "261106",
+		text: "La plus grande chose du monde, c'est de savoir être à soi.",
+		author: "Michel de Montaigne",
+		lang: 'fr',
+	},
+	{
+		id: "261107",
+		text: "Il semble que la perfection soit atteinte non quand il n'y a plus rien à ajouter, mais quand il n'y a plus rien à retrancher.",
+		author: "Antoine de Saint-Exupéry",
+		lang: 'fr',
+	},
+	{
+		id: "261108",
+		text: "C'est le temps que tu as perdu pour ta rose qui fait ta rose si importante.",
+		author: "Antoine de Saint-Exupéry",
+		lang: 'fr',
+	},
+	{
+		id: "261109",
+		text: "On ne voit bien qu'avec le cœur. L'essentiel est invisible pour les yeux.",
+		author: "Antoine de Saint-Exupéry",
+		lang: 'fr',
+	},
+	{
+		id: "261110",
+		text: "Ce n'est pas que nous ayons peu de temps, c'est que nous en perdons beaucoup.",
+		author: "Sénèque",
+		lang: 'fr',
+	},
+	{
+		id: "261111",
+		text: "Nous n'avons point reçu une vie brève, nous l'avons faite telle.",
+		author: "Sénèque",
+		lang: 'fr',
+	},
+	{
+		id: "261112",
+		text: "Rien ne sert de courir ; il faut partir à point.",
+		author: "Jean de La Fontaine",
+		lang: 'fr',
+	},
+	{
+		id: "261113",
+		text: "Patience et longueur de temps font plus que force ni que rage.",
+		author: "Jean de La Fontaine",
+		lang: 'fr',
+	},
+	{
+		id: "261114",
+		text: "Hâtez-vous lentement, et, sans perdre courage, vingt fois sur le métier remettez votre ouvrage.",
+		author: "Nicolas Boileau",
+		lang: 'fr',
+	},
+	{
+		id: "261115",
+		text: "Le travail éloigne de nous trois grands maux : l'ennui, le vice et le besoin.",
+		author: "Voltaire",
+		lang: 'fr',
+	},
+	{
+		id: "261116",
+		text: "Il faut cultiver notre jardin.",
+		author: "Voltaire",
+		lang: 'fr',
+	},
+	{
+		id: "261117",
+		text: "Il faut manger pour vivre, et non pas vivre pour manger.",
+		author: "Molière",
+		lang: 'fr',
+	},
+	{
+		id: "261118",
+		text: "Science sans conscience n'est que ruine de l'âme.",
+		author: "François Rabelais",
+		lang: 'fr',
+	},
+	{
+		id: "261119",
+		text: "Le pessimisme est d'humeur ; l'optimisme est de volonté.",
+		author: "Alain",
+		lang: 'fr',
+	},
+	{
+		id: "261120",
+		text: "Ceux qui vivent, ce sont ceux qui luttent.",
+		author: "Victor Hugo",
+		lang: 'fr',
+	},
+	{
+		id: "261121",
+		text: "Qui trop embrasse mal étreint.",
+		author: "Proverbe",
+		lang: 'fr',
+	},
+	{
+		id: "261122",
+		text: "Qui court deux lièvres à la fois n'en prend aucun.",
+		author: "Proverbe",
+		lang: 'fr',
 	},
 ];
 

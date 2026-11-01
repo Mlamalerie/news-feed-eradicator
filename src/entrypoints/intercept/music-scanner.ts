@@ -1,4 +1,5 @@
 import {
+	cardKey,
 	classifyCard,
 	defaultMusicFilterSettings,
 	shouldHideShelf,
@@ -61,6 +62,26 @@ export class MusicScanner {
 	private flushScheduled = false;
 	private styleEl?: HTMLStyleElement;
 	private onNavigate = () => this.scanAll();
+
+	// Distinct items hidden since the page loaded, so recycled cards and re-scans aren't counted twice
+	private seen = new Set<string>();
+	private pendingCount = 0;
+	private reportTimer?: ReturnType<typeof setTimeout>;
+
+	/** onHidden is called (batched) with the number of newly hidden items. */
+	constructor(private onHidden: (count: number) => void = () => {}) {}
+
+	private countNew(key: string) {
+		if (this.seen.has(key)) return;
+		this.seen.add(key);
+		this.pendingCount++;
+		this.reportTimer ??= setTimeout(() => {
+			const n = this.pendingCount;
+			this.pendingCount = 0;
+			this.reportTimer = undefined;
+			if (n > 0) this.onHidden(n);
+		}, 1500);
+	}
 
 	/** Turn the scanner on or off and give it the latest settings. Safe to call repeatedly. */
 	update({ active, settings }: { active: boolean; settings: MusicFilterSettings }) {
@@ -161,13 +182,25 @@ export class MusicScanner {
 		if (!this.active || !el.isConnected) return;
 
 		const surface = surfaceForPath(window.location.pathname);
-		const hide = el.matches(SHELF_SELECTOR)
-			? shouldHideShelf(firstText(el, SHELF_TITLE_SELECTORS), this.settings, surface)
-			: classifyCard(extractCardInfo(el), this.settings, surface).hide;
+		let hide: boolean;
+		let key = '';
+		if (el.matches(SHELF_SELECTOR)) {
+			const title = firstText(el, SHELF_TITLE_SELECTORS);
+			hide = shouldHideShelf(title, this.settings, surface);
+			key = `shelf:${title}`;
+		} else {
+			const info = extractCardInfo(el);
+			hide = classifyCard(info, this.settings, surface).hide;
+			if (hide) key = cardKey(info);
+		}
 
 		if (hide !== el.hasAttribute(HIDDEN_ATTR)) {
-			if (hide) el.setAttribute(HIDDEN_ATTR, '');
-			else el.removeAttribute(HIDDEN_ATTR);
+			if (hide) {
+				el.setAttribute(HIDDEN_ATTR, '');
+				this.countNew(key);
+			} else {
+				el.removeAttribute(HIDDEN_ATTR);
+			}
 		}
 	}
 }

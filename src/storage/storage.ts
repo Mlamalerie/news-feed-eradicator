@@ -3,6 +3,7 @@ import { getBrowser } from "../lib/webextension";
 import type { Quote } from "../quote";
 import type { RegionId, SiteId, SiteList } from "../types/sitelist";
 import { sanitizeMusicFilter, type MusicFilterSettings } from "../lib/music-filter";
+import { addToStats, type Stats } from "../lib/stats";
 import { type StorageSyncV1, SiteStateTagV1, type StorageLocal, type StorageLocalV2, CURRENT_STORAGE_SCHEMA_VERSION, type SiteConfig, type Theme, defaultQuoteLists, type QuoteListId, type QuoteList, BUILTIN_QUOTE_LIST_ID, type SnoozeMode } from "./schema";
 
 const ensureMigrated = async (): Promise<void> => {
@@ -91,6 +92,13 @@ export const saveWidgetStyle = (widgetTheme: StorageLocalV2['widgetStyle']) => s
 
 export const loadMusicFilter = async (): Promise<MusicFilterSettings> => sanitizeMusicFilter(await getKey('musicFilter'));
 export const saveMusicFilter = (settings: MusicFilterSettings) => setKey('musicFilter', sanitizeMusicFilter(settings));
+
+export const loadQuoteLanguage = () => getKey('quoteLanguage', 'all');
+export const saveQuoteLanguage = (lang: NonNullable<StorageLocalV2['quoteLanguage']>) => setKey('quoteLanguage', lang);
+
+export const loadStats = (): Promise<Stats> => getKey('stats', {});
+export const addStat = async (date: string, key: string, count: number) => setKey('stats', addToStats(await loadStats(), date, key, count));
+export const clearStats = () => setKey('stats', {});
 
 export const loadHideQuotes = () => getKey('hideQuotes', false);
 export const saveHideQuotes = (hideQuotes: boolean) => setKey('hideQuotes', hideQuotes);

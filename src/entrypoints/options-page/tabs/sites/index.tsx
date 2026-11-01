@@ -5,6 +5,7 @@ import { originsForSite } from "/lib/util";
 import { SiteConfigPanel } from "./site-configuration";
 import { useOptionsPageState } from "../../state";
 import { LockedSettingsOverlay, SettingsLockFooter } from "../../lock";
+import { SiteLogo } from "/shared/components/site-logo";
 
 const browser = getBrowser();
 
@@ -68,6 +69,7 @@ const Site = ({ site }: { site: Site }) => {
 				<Show when={state.sitesWithInvalidPermissions().includes(site.id)}>
 					<span class="">⚠️</span>
 				</Show>
+				<SiteLogo siteId={site.id} />
 				<div class="flex flex-col">
 					<div>{site.title}</div>
 					<div class="font-xs text-figure-500">{site.hosts.join(', ')}</div>

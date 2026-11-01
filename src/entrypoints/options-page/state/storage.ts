@@ -1,6 +1,6 @@
 import { createResource } from "solid-js";
 import { resourceObj } from "/lib/solid-util";
-import { loadRegionHideStyle, loadWidgetStyle, saveRegionHideStyle, saveWidgetStyle, loadSettingsLocked, saveSettingsLocked, loadHideQuotes, saveHideQuotes, saveNewQuoteList } from "/storage/storage";
+import { loadRegionHideStyle, loadWidgetStyle, saveRegionHideStyle, saveWidgetStyle, loadSettingsLocked, saveSettingsLocked, loadHideQuotes, saveHideQuotes, loadQuoteLanguage, saveQuoteLanguage, saveNewQuoteList } from "/storage/storage";
 import type { StorageLocalV2, QuoteListId } from "/storage/schema";
 import { sendToServiceWorker } from "/messaging/messages";
 
@@ -9,6 +9,7 @@ export class StorageState {
 	regionHideStyle = resourceObj(createResource(loadRegionHideStyle));
 	settingsLocked = resourceObj(createResource(loadSettingsLocked));
 	hideQuotes = resourceObj(createResource(loadHideQuotes));
+	quoteLanguage = resourceObj(createResource(loadQuoteLanguage));
 
 	async setWidgetStyle(style: StorageLocalV2['widgetStyle']) {
 		await saveWidgetStyle(style)
@@ -39,6 +40,11 @@ export class StorageState {
 		sendToServiceWorker({
 			type: 'notifyOptionsUpdated',
 		})
+	}
+
+	async setQuoteLanguage(lang: NonNullable<StorageLocalV2['quoteLanguage']>) {
+		await saveQuoteLanguage(lang);
+		this.quoteLanguage.refetch();
 	}
 
 	async newQuoteList(): Promise<QuoteListId> {

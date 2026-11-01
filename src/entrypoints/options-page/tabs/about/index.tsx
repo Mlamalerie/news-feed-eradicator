@@ -13,7 +13,11 @@ export const AboutTabContent = () => {
 
 				<div class="prose">
 					<h3>Credits</h3>
-					<p>This is a fork of <a href="https://github.com/jordwest/news-feed-eradicator">News Feed Eradicator</a>, created by Jordan West and contributors and released under the AGPL-3.0 licence. The site-blocking engine and most of the supported sites come from that project.</p>
+					<p>This is a fork of <a href="https://github.com/jordwest/news-feed-eradicator">News Feed Eradicator</a>, created by Jordan West and contributors and released under the AGPL-3.0 licence. The site-blocking engine, the options page, the quote widget and most of the supported sites come from that project. Thank you to Jordan West and to everyone who contributed.</p>
+				</div>
+
+				<div class="prose">
+					<p>Silent Feed is made by Mlamali Said Salimo. Site logos come from <a href="https://simpleicons.org/">Simple Icons</a> and belong to their respective owners; see <a href={`${REPO}/blob/main/NOTICE.md`}>NOTICE.md</a> for all credits.</p>
 				</div>
 
 				<div class="prose">

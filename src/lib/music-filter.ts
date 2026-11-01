@@ -185,3 +185,15 @@ export const sanitizeMusicFilter = (raw: unknown): MusicFilterSettings => {
 		blockKeywords: asList(r.blockKeywords),
 	};
 };
+
+/**
+ * Stable identity of a card, so the same video is only counted once even if YouTube re-renders it.
+ * Uses the video id or playlist id from the links, else falls back to title + channel.
+ */
+export const cardKey = (card: CardInfo): string => {
+	for (const href of card.hrefs) {
+		const m = /[?&]v=([\w-]{6,})|[?&]list=([\w-]+)/.exec(href);
+		if (m) return m[1] ?? m[2]!;
+	}
+	return `${normalize(card.title)}|${normalize(card.channel)}`.slice(0, 160);
+};
